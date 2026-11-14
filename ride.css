@@ -1,0 +1,94 @@
+/* ==========================================================
+   MOTO // GARAGE — 出行准备 / RIDE（天气 + 地图路线）
+   复用设计系统变量，新增页面专属样式
+   ========================================================== */
+
+/* ---------- RIDE 页面双栏布局 ---------- */
+.ride-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:14px;align-items:start}
+@media (max-width:960px){.ride-grid{grid-template-columns:1fr}}
+
+/* ---------- 天气面板 ---------- */
+.wx-panel .panel-head{margin-bottom:18px}
+.wx-controls{display:grid;gap:12px;margin-bottom:20px}
+.wx-cities{display:flex;flex-wrap:wrap;gap:7px}
+.wx-search{display:flex;align-items:center;gap:9px}
+.wx-search .field-ic{color:var(--muted);flex:none}
+.wx-search .field-ic .icon{width:16px;height:16px}
+.wx-search input{flex:1;min-width:0}
+.wx-search .btn{flex:none}
+.wx-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.wx-result{min-height:120px}
+.wx-loading,.wx-error{display:flex;align-items:center;gap:12px;padding:18px 0;color:var(--text-2)}
+.wx-loading .icon,.wx-error .icon{width:22px;height:22px;color:var(--accent);flex:none}
+.wx-error{flex-direction:column;align-items:flex-start;gap:4px}
+.wx-error strong{font-size:calc(15px * var(--ui-scale));color:var(--text)}
+.wx-error p{margin:0;color:var(--muted);font-size:calc(12.5px * var(--ui-scale));line-height:1.6}
+.wx-error .wx-sub{color:var(--muted-2);font-size:calc(11px * var(--ui-scale))}
+.wx-error--soft{padding:12px 0;opacity:.92}
+.wx-error--soft .icon{color:#e0a23a}
+.wx-error--soft strong{color:#e0a23a}
+
+.wx-now{display:flex;align-items:flex-end;gap:16px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px dashed var(--line)}
+.wx-temp{display:flex;align-items:flex-start;line-height:1}
+.wx-temp strong{font-family:var(--font-display);font-size:calc(58px * var(--ui-scale));font-weight:700;letter-spacing:.01em;color:var(--text)}
+.wx-temp span{font-family:var(--font-display);font-size:calc(20px * var(--ui-scale));color:var(--accent);margin-top:8px}
+.wx-now-meta{display:flex;flex-direction:column;gap:5px;padding-bottom:8px}
+.wx-now-meta strong{font-family:var(--font-display);font-size:calc(20px * var(--ui-scale));letter-spacing:.04em}
+.wx-now-meta span{font-size:calc(12px * var(--ui-scale));color:var(--muted)}
+
+.wx-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.wx-metric{display:flex;flex-direction:column;gap:6px;padding:13px 12px;background:rgba(12,14,17,.5);border:1px solid var(--line-soft);border-left:2px solid var(--accent-line)}
+.wx-metric-label{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.wx-metric strong{font-family:var(--font-display);font-size:calc(19px * var(--ui-scale));font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+@media (max-width:520px){.wx-metrics{grid-template-columns:repeat(2,1fr)}}
+
+.wx-suit{display:flex;gap:12px;align-items:flex-start;padding:14px 15px;border:1px solid var(--line);background:rgba(75,208,139,.07);border-left:3px solid var(--ok)}
+.wx-suit .icon{width:20px;height:20px;color:var(--ok);flex:none;margin-top:2px}
+.wx-suit strong{display:block;font-family:var(--font-display);font-size:calc(15px * var(--ui-scale));letter-spacing:.04em;margin-bottom:6px}
+.wx-suit ul{margin:0;padding-left:18px}
+.wx-suit li{font-size:calc(12.5px * var(--ui-scale));color:var(--text-2);line-height:1.75}
+.wx-suit.is-caution{background:var(--amber-soft);border-left-color:var(--amber)}
+.wx-suit.is-caution .icon{color:var(--amber)}
+.wx-suit.is-bad{background:rgba(255,93,93,.08);border-left-color:var(--danger)}
+.wx-suit.is-bad .icon{color:var(--danger)}
+.wx-cache-note{margin:12px 0 0;font-family:var(--font-mono);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.04em;color:var(--muted-2)}
+
+/* ---------- 首页天气摘要卡 ---------- */
+.home-wx{padding:16px 20px;margin-top:0}
+.home-wx-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.home-wx-now{display:flex;align-items:center;gap:12px;flex:none}
+.home-wx-temp{font-family:var(--font-display);font-size:calc(32px * var(--ui-scale));font-weight:700;color:var(--text);line-height:1}
+.home-wx-meta{display:flex;flex-direction:column;gap:3px}
+.home-wx-meta strong{font-family:var(--font-display);font-size:calc(15px * var(--ui-scale));letter-spacing:.04em}
+.home-wx-meta span{font-size:calc(11.5px * var(--ui-scale));color:var(--muted)}
+.home-wx-suit{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border:1px solid var(--line);background:rgba(75,208,139,.07);color:var(--ok);font-size:calc(12px * var(--ui-scale));letter-spacing:.04em;flex:none}
+.home-wx-suit .icon{width:15px;height:15px}
+.home-wx-suit.is-caution{background:var(--amber-soft);color:var(--amber)}
+.home-wx-suit.is-bad{background:rgba(255,93,93,.08);color:var(--danger)}
+.home-wx .btn{margin-left:auto}
+.home-wx-loading{display:inline-flex;align-items:center;gap:9px;color:var(--muted);font-size:calc(12.5px * var(--ui-scale))}
+.home-wx-loading .icon{width:17px;height:17px;color:var(--accent)}
+
+/* ---------- 地图路线 ---------- */
+.route-form{display:grid;gap:16px}
+.route-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.route-row{grid-template-columns:1fr}}
+.route-form-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.route-form-acts .btn{flex:1;min-width:140px}
+.route-list-head{display:flex;align-items:center;justify-content:space-between;margin:24px 0 12px;padding-top:18px;border-top:1px dashed var(--line)}
+.route-list-head .eyebrow{margin-bottom:0}
+.route-list-head #route-count{font-family:var(--font-mono);font-size:calc(11px * var(--ui-scale));letter-spacing:.06em;color:var(--muted)}
+.route-list{display:grid;gap:10px}
+.route-card{position:relative;padding:15px 16px;border:1px solid var(--line);background:rgba(12,14,17,.5);transition:border-color var(--fast),transform var(--fast)}
+.route-card:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+.route-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.route-top strong{font-family:var(--font-display);font-size:calc(17px * var(--ui-scale));letter-spacing:.04em}
+.route-hint{font-family:var(--font-mono);font-size:calc(9.5px * var(--ui-scale));letter-spacing:.06em;color:var(--muted-2);border:1px solid var(--line);padding:2px 7px}
+.route-path{display:flex;align-items:center;gap:9px;font-size:calc(13px * var(--ui-scale));color:var(--text-2);flex-wrap:wrap}
+.route-path .icon{width:15px;height:15px;color:var(--accent);flex:none}
+.route-path span{max-width:42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.route-city{margin-top:7px;font-size:calc(11.5px * var(--ui-scale));color:var(--muted)}
+.route-note{margin-top:5px;font-size:calc(12px * var(--ui-scale));color:var(--muted);line-height:1.6}
+.route-acts{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.route-acts .btn{flex:1;min-width:84px}

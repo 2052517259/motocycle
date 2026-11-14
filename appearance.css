@@ -1,0 +1,80 @@
+/* ==========================================================
+   MOTO // GARAGE — Appearance Settings
+   跟随统一设计规范：所有字号同样受 --ui-scale 控制
+   ========================================================== */
+
+/* 顶栏入口 */
+.appearance-tool{
+  width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);background:var(--ink-850);color:var(--text-2);
+  transition:color var(--fast),border-color var(--fast),background var(--fast);flex:none;
+}
+.appearance-tool .icon{width:17px;height:17px}
+.appearance-tool:hover{border-color:var(--accent-line);color:var(--accent-hi);background:var(--accent-soft)}
+
+/* 实时预览 */
+.ap-preview{
+  position:relative;padding:10px 16px;margin-bottom:9px;overflow:hidden;
+  border:1px solid var(--line);background:linear-gradient(150deg,var(--ink-800),var(--ink-950));
+}
+.ap-preview::before{content:"";position:absolute;left:0;top:0;width:54px;height:2px;background:var(--accent)}
+.ap-preview h3{margin:0 0 5px;font-size:calc(21px * var(--ui-scale))}
+.ap-preview p{margin:0 0 9px;color:var(--text-2);font-size:calc(13px * var(--ui-scale));line-height:var(--read-leading)}
+.ap-preview-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.ap-preview-row .btn{pointer-events:none}
+
+/* 分组 */
+.ap-group{padding:7px 0;border-top:1px dashed var(--line)}
+.ap-group:first-of-type{border-top:0;padding-top:0}
+.ap-group-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
+.ap-group-head strong{font-family:var(--font-display);font-size:calc(17px * var(--ui-scale));font-weight:700;letter-spacing:.06em}
+.ap-group-head .ap-value{font-family:var(--font-mono);font-size:calc(11.5px * var(--ui-scale));color:var(--accent);letter-spacing:.06em}
+.ap-hint{margin:4px 0 0;font-size:calc(11.5px * var(--ui-scale));line-height:1.6;color:var(--muted-2)}
+
+/* 分段选择 */
+.ap-seg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.ap-seg button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  min-height:42px;padding:5px 4px;border:1px solid var(--line);background:var(--ink-900);
+  color:var(--text-2);font-family:var(--font-body);font-size:calc(13px * var(--ui-scale));
+  transition:all var(--fast);
+}
+.ap-seg button small{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));color:var(--muted-2);letter-spacing:.04em}
+.ap-seg button:hover{border-color:var(--accent-line);color:var(--text)}
+.ap-seg button.is-active{border-color:var(--accent);background:var(--accent-soft);color:var(--text);box-shadow:inset 0 0 0 1px var(--accent-line)}
+.ap-seg button.is-active small{color:var(--accent)}
+
+/* 强调色 */
+.ap-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.ap-swatch{
+  display:flex;align-items:center;gap:8px;min-height:38px;padding:6px 9px;
+  border:1px solid var(--line);background:var(--ink-900);color:var(--text-2);
+  font-size:calc(12.5px * var(--ui-scale));text-align:left;transition:all var(--fast);
+}
+.ap-swatch i{display:block;width:17px;height:17px;flex:none;border:1px solid rgba(255,255,255,.18)}
+.ap-swatch:hover{border-color:var(--accent-line);color:var(--text)}
+.ap-swatch.is-active{border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
+
+/* 开关 */
+.ap-toggle{
+  display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;text-align:left;
+  border:1px solid var(--line);background:var(--ink-900);color:var(--text-2);transition:all var(--fast);
+}
+.ap-toggle:hover{border-color:var(--accent-line)}
+.ap-toggle.is-on{border-color:var(--accent-line);background:var(--accent-soft)}
+.ap-toggle-track{position:relative;width:38px;height:20px;flex:none;background:var(--ink-700);border:1px solid var(--line);transition:background var(--fast)}
+.ap-toggle-track span{position:absolute;left:2px;top:2px;width:14px;height:14px;background:var(--muted);transition:transform var(--fast),background var(--fast)}
+.ap-toggle.is-on .ap-toggle-track{background:var(--accent-soft);border-color:var(--accent)}
+.ap-toggle.is-on .ap-toggle-track span{transform:translateX(18px);background:var(--accent)}
+.ap-toggle-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ap-toggle-text strong{font-size:calc(13px * var(--ui-scale));color:var(--text);font-weight:700}
+.ap-toggle-text em{font-style:normal;font-size:calc(11px * var(--ui-scale));line-height:1.5;color:var(--muted-2)}
+
+.ap-footer-note{display:flex;align-items:flex-start;gap:8px;margin:6px 0 0;font-size:calc(11px * var(--ui-scale));line-height:1.6;color:var(--muted-2)}
+.ap-footer-note .icon{width:14px;height:14px;flex:none;margin-top:2px}
+
+@media (max-width:640px){
+  .ap-preview{padding:14px}
+  .ap-seg,.ap-swatches{grid-template-columns:repeat(2,1fr)}
+  .ap-seg button{min-height:44px}
+}
