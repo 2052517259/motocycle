@@ -1,0 +1,279 @@
+/* ============================================================
+   个人网站样式表
+   ------------------------------------------------------------
+   文件结构（自上而下）：
+   1. 全局变量与基础重置
+   2. 通用工具类（容器、按钮、区块标题）
+   3. 顶部导航（含移动端汉堡菜单）
+   4. 首页 Hero 区
+   5. 关于我
+   6. 项目展示（卡片 + 筛选）
+   7. 联系方式（信息 + 表单）
+   8. 页脚
+   9. 动效（滚动渐显）
+   10. 响应式适配（平板 / 手机）
+   ============================================================ */
+
+/* ---------- 1. 全局变量与基础重置 ---------- */
+:root {
+  /* 主题色：想换配色只需改这几个变量 */
+  --primary: #4f6ef7;          /* 主色：按钮、链接、强调 */
+  --primary-dark: #3b56d4;     /* 主色按下态 */
+  --bg: #ffffff;               /* 页面背景 */
+  --bg-alt: #f5f7fb;           /* 交替区块背景 */
+  --text: #24292f;             /* 正文文字 */
+  --text-light: #6a737d;       /* 次要文字 */
+  --border: #e4e8ef;           /* 边框 / 分割线 */
+  --card-bg: #ffffff;          /* 卡片背景 */
+  --shadow: 0 2px 12px rgba(36, 41, 47, .08);
+  --radius: 12px;              /* 圆角大小 */
+
+  /* 夜间模式：系统开启深色时自动生效，无需 JS */
+  /*（颜色变量被整体覆盖，所有组件自动跟随） */
+}
+
+/* 跟随系统的深色模式 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181d;
+    --bg-alt: #1d2026;
+    --text: #e6e8eb;
+    --text-light: #9aa3ad;
+    --border: #2e3238;
+    --card-bg: #1d2026;
+    --shadow: 0 2px 12px rgba(0, 0, 0, .35);
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  /* 平滑滚动：点击导航链接时滚动更顺滑 */
+  scroll-behavior: smooth;
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--primary); text-decoration: none; }
+ul { list-style: none; }
+
+/* ---------- 2. 通用工具类 ---------- */
+/* container：限制内容最大宽度并水平居中，保证大屏不拉伸 */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* 每个 section 的统一上下留白 */
+.section { padding: 80px 0; }
+/* 交替背景色，视觉上区分不同板块 */
+.section-alt { background: var(--bg-alt); }
+
+/* 区块标题：主标题 + 小字英文副标 */
+.section-title { font-size: 32px; margin-bottom: 8px; }
+.section-title span {
+  font-size: 14px; color: var(--text-light); font-weight: normal;
+}
+.section-desc { color: var(--text-light); margin-bottom: 32px; }
+.section-desc code {
+  background: var(--bg-alt); padding: 2px 6px; border-radius: 4px; font-size: 13px;
+}
+
+/* 按钮：实心（主按钮）与描边（次按钮）两种 */
+.btn {
+  display: inline-block; padding: 10px 24px; border-radius: 999px;
+  font-size: 15px; cursor: pointer; transition: all .25s; border: 1px solid transparent;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+.btn-outline { border-color: var(--primary); color: var(--primary); background: transparent; }
+.btn-outline:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
+
+/* ---------- 3. 顶部导航 ---------- */
+.site-header {
+  position: fixed;             /* 固定在页面顶部 */
+  top: 0; left: 0; right: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+.nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.nav-logo { font-weight: 700; font-size: 18px; letter-spacing: 1px; color: var(--text); }
+.nav-menu { display: flex; gap: 28px; }
+.nav-link { color: var(--text-light); font-size: 15px; transition: color .2s; }
+.nav-link:hover, .nav-link.active { color: var(--primary); }
+
+/* 汉堡按钮：桌面端隐藏，移动端显示 */
+.nav-toggle {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 6px;
+}
+.nav-toggle span {
+  width: 22px; height: 2px; background: var(--text);
+  transition: transform .3s, opacity .3s;
+}
+/* 菜单展开时汉堡变成 X */
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------- 4. 首页 Hero ---------- */
+.hero {
+  /* 顶部留出导航栏的高度 */
+  padding: 150px 0 100px;
+  background:
+    linear-gradient(180deg, var(--bg-alt) 0%, var(--bg) 100%);
+}
+.hero-inner { display: flex; align-items: center; gap: 60px; }
+.hero-text { flex: 1; }
+.hero-greet { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+.hero-name { font-size: 48px; line-height: 1.2; margin-bottom: 12px; }
+.hero-role { font-size: 22px; color: var(--text-light); font-weight: 500; margin-bottom: 20px; }
+.hero-intro { color: var(--text-light); max-width: 520px; margin-bottom: 32px; }
+.hero-actions { display: flex; gap: 16px; }
+
+.hero-avatar {
+  flex-shrink: 0;
+  width: 220px; height: 220px; border-radius: 50%;
+  overflow: hidden; box-shadow: var(--shadow);
+  border: 4px solid var(--bg);
+}
+.hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- 5. 关于我 ---------- */
+.about-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 48px; }
+.about-text p { margin-bottom: 16px; }
+
+/* 数据统计条（工作年限等） */
+.about-stats { display: flex; gap: 40px; margin-top: 32px; }
+.stat-item strong { font-size: 28px; color: var(--primary); display: block; }
+.stat-item span { font-size: 13px; color: var(--text-light); }
+
+/* 技能标签 */
+.about-skills h3 { margin-bottom: 16px; font-size: 18px; }
+.skill-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.skill-tag {
+  padding: 6px 14px; border-radius: 999px; font-size: 13px;
+  background: var(--bg); border: 1px solid var(--border); color: var(--text-light);
+}
+
+/* ---------- 6. 项目展示 ---------- */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.filter-btn {
+  padding: 7px 18px; border-radius: 999px; font-size: 13px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--bg); color: var(--text-light);
+  transition: all .2s;
+}
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* 项目卡片网格：桌面 3 列，窄屏自动降列 */
+.project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.project-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s;
+  display: flex; flex-direction: column;
+}
+.project-card:hover { transform: translateY(-6px); }
+
+/* 卡片顶部封面图（占位用渐变，有图后替换 <img> 即可） */
+.project-cover {
+  height: 150px; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; color: #fff; background: var(--primary);
+}
+.project-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+.project-tag { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 6px; }
+.project-title { font-size: 18px; margin-bottom: 8px; }
+.project-desc { font-size: 14px; color: var(--text-light); flex: 1; }
+.project-links { margin-top: 16px; display: flex; gap: 16px; }
+.project-links a { font-size: 14px; font-weight: 500; }
+
+/* 筛选时被隐藏的卡片 */
+.project-card.hidden { display: none; }
+
+/* ---------- 7. 联系方式 ---------- */
+.contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; }
+.contact-tip { color: var(--text-light); margin-bottom: 24px; }
+.contact-list li { margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+.contact-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.contact-label { display: block; font-size: 12px; color: var(--text-light); }
+.contact-value { color: var(--text); font-weight: 500; }
+
+/* 表单样式 */
+.contact-form-wrap {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px;
+}
+.contact-form label { display: block; margin-bottom: 18px; }
+.contact-form label > span {
+  display: block; font-size: 13px; color: var(--text-light); margin-bottom: 6px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.contact-form input, .contact-form textarea {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 14px; font-family: inherit;
+  background: var(--bg); color: var(--text); transition: border-color .2s;
+}
+.contact-form input:focus, .contact-form textarea:focus {
+  outline: none; border-color: var(--primary);
+}
+.form-error { color: #d93025; font-size: 13px; margin: -8px 0 14px; }
+.form-note { font-size: 12px; color: var(--text-light); margin-top: 12px; }
+
+/* ---------- 8. 页脚 ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0; text-align: center;
+  font-size: 13px; color: var(--text-light);
+}
+
+/* ---------- 9. 动效：滚动渐显 ---------- */
+/* 初始透明下移，进入视口后由 JS 加 .visible 类淡入 */
+.reveal { opacity: 0; transform: translateY(24px); transition: all .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ---------- 10. 响应式适配 ---------- */
+/* 平板（≤ 960px）：导航折叠为汉堡菜单，网格降为 2 列 */
+@media (max-width: 960px) {
+  .nav-toggle { display: flex; }
+
+  /* 移动端菜单：默认隐藏，展开时下拉 */
+  .nav-menu {
+    position: absolute; top: 64px; left: 0; right: 0;
+    flex-direction: column; gap: 0;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    max-height: 0; overflow: hidden; transition: max-height .35s ease;
+  }
+  .nav-menu.open { max-height: 300px; }
+  .nav-menu li { border-top: 1px solid var(--border); }
+  .nav-menu li a { display: block; padding: 14px 24px; }
+
+  .hero-inner { flex-direction: column-reverse; gap: 36px; text-align: center; }
+  .hero-intro { margin: 0 auto 32px; }
+  .hero-actions { justify-content: center; }
+
+  .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+  .project-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 手机（≤ 640px）：全部单列，字号收紧 */
+@media (max-width: 640px) {
+  .section { padding: 56px 0; }
+  .hero { padding: 110px 0 70px; }
+  .hero-name { font-size: 34px; }
+  .hero-role { font-size: 18px; }
+  .hero-avatar { width: 150px; height: 150px; }
+  .section-title { font-size: 26px; }
+
+  .project-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .about-stats { gap: 24px; flex-wrap: wrap; }
+  .contact-form-wrap { padding: 22px; }
+}
