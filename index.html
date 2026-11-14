@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport：让页面在移动端按设备宽度缩放，是响应式布局的前提 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="个人主页 - 介绍我自己、我的项目以及联系方式">
+  <title>我的个人网站</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===================== 顶部导航 ===================== -->
+  <header class="site-header" id="site-header">
+    <nav class="nav container">
+      <!-- 左侧 Logo / 姓名（对应 js/data.js 中的 PROFILE.name） -->
+      <a href="#home" class="nav-logo" id="nav-logo">MY SITE</a>
+
+      <!-- 右侧菜单：桌面端水平排列，移动端隐藏、由汉堡按钮展开 -->
+      <button class="nav-toggle" id="nav-toggle" aria-label="打开菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#home" class="nav-link">首页</a></li>
+        <li><a href="#about" class="nav-link">关于我</a></li>
+        <li><a href="#projects" class="nav-link">项目展示</a></li>
+        <li><a href="#contact" class="nav-link">联系方式</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ===================== 首页 / Hero ===================== -->
+    <section class="hero section" id="home">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <!-- 问候语与主标题：内容会被 js/main.js 按 data.js 自动填充，也可直接改这里 -->
+          <p class="hero-greet" id="hero-greet">你好，我是</p>
+          <h1 class="hero-name" id="hero-name">你的名字</h1>
+          <h2 class="hero-role" id="hero-role">你的职位 / 一句话介绍</h2>
+          <p class="hero-intro" id="hero-intro">
+            这里是一段简短的自我介绍：我做什么、擅长什么、这个网站用来展示什么。
+          </p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">查看我的项目</a>
+            <a href="#contact" class="btn btn-outline">联系我</a>
+          </div>
+        </div>
+        <!-- 头像：把你的照片放到 assets/avatar.jpg 后替换 src 即可 -->
+        <div class="hero-avatar">
+          <img src="assets/avatar.svg" alt="我的头像" id="hero-avatar">
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 关于我 ===================== -->
+    <section class="section section-alt" id="about">
+      <div class="container">
+        <h2 class="section-title">关于我 <span>/ ABOUT ME</span></h2>
+
+        <div class="about-grid">
+          <!-- 左：详细自我介绍 -->
+          <div class="about-text">
+            <p>
+              在这里写一段更完整的自我介绍：例如你的教育背景、工作经历、
+              目前关注的领域，以及工作之外的兴趣爱好等。
+            </p>
+            <p>
+              建议写 2~3 段，保持真诚自然即可。
+            </p>
+            <!-- 简单的数据统计（如工作年限、项目数量），纯展示用 -->
+            <div class="about-stats" id="about-stats">
+              <!-- stat 数量与内容可在 data.js 的 PROFILE.stats 中修改 -->
+            </div>
+          </div>
+
+          <!-- 右：技能标签（内容来自 data.js 的 PROFILE.skills） -->
+          <div class="about-skills">
+            <h3>技能栈</h3>
+            <ul class="skill-list" id="skill-list">
+              <!-- 由 js/main.js 渲染 -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 项目展示 ===================== -->
+    <section class="section" id="projects">
+      <div class="container">
+        <h2 class="section-title">项目展示 <span>/ PROJECTS</span></h2>
+        <p class="section-desc">
+          以下项目列表由 <code>js/data.js</code> 中的 <code>PROJECTS</code> 数组渲染，
+          想增删项目只需修改该文件，无需改动 HTML。
+        </p>
+
+        <!-- 分类筛选按钮：分类自动取自 PROJECTS 中的 tag 字段 -->
+        <div class="filter-bar" id="filter-bar">
+          <button class="filter-btn active" data-filter="all">全部</button>
+        </div>
+
+        <!-- 项目卡片容器：由 js/main.js 填充 -->
+        <div class="project-grid" id="project-grid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== 联系方式 ===================== -->
+    <section class="section section-alt" id="contact">
+      <div class="container">
+        <h2 class="section-title">联系方式 <span>/ CONTACT</span></h2>
+
+        <div class="contact-grid">
+          <!-- 左：直接的联系方式（来自 data.js 的 PROFILE.contact） -->
+          <div class="contact-info">
+            <p class="contact-tip">欢迎通过以下任意方式与我交流：</p>
+            <ul class="contact-list" id="contact-list">
+              <!-- 由 js/main.js 渲染 -->
+            </ul>
+          </div>
+
+          <!-- 右：留言表单 -->
+          <div class="contact-form-wrap">
+            <!--
+              说明：这是纯前端表单，没有服务器。
+              点击「发送」时会把内容拼成邮件，调起你电脑上的邮件客户端（mailto 协议）。
+              如果以后想接真实后端，把 main.js 中 handleFormSubmit 里的 mailto 逻辑
+              替换成 fetch('你的接口地址', {...}) 即可。
+            -->
+            <form class="contact-form" id="contact-form" novalidate>
+              <div class="form-row">
+                <label>
+                  <span>你的称呼</span>
+                  <input type="text" name="name" placeholder="怎么称呼你？" required>
+                </label>
+                <label>
+                  <span>你的邮箱</span>
+                  <input type="email" name="email" placeholder="name@example.com" required>
+                </label>
+              </div>
+              <label>
+                <span>留言内容</span>
+                <textarea name="message" rows="5" placeholder="想说的话…" required></textarea>
+              </label>
+              <p class="form-error" id="form-error" hidden></p>
+              <button type="submit" class="btn btn-primary">发送留言</button>
+              <p class="form-note">提交后会调起邮件客户端，发送前可再编辑。</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== 页脚 ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        © <span id="footer-year">2026</span>
+        <span id="footer-name">你的名字</span>
+        · 由纯 HTML / CSS / JS 构建，无任何框架依赖
+      </p>
+    </div>
+  </footer>
+
+  <!-- 脚本顺序：先加载内容数据，再加载交互逻辑 -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
