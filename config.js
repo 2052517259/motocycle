@@ -9,6 +9,9 @@ MOTO.CONFIG = {
     oauthRelayBaseUrl: 'https://www.workbuddy.cn/v2/as/genie-baas/oauth',
     publishableKey: 'wbpk_4AHOoQCEIt2m0ldsodoed0_kqGWSouvSxxq5NPwRBLI3ulT23s9vy7o',
     sdk: 'https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js',
+    /* 官方发布链接（云登录仅在此域名可用：接口与页面同源，不受跨域限制）。
+       在 GitHub Pages 等第三方域名打开时，云同步面板会提示用户改用此链接登录。 */
+    officialUrl: 'https://wbapp-4ahooqceit2m0ldsodoed0.app.workbuddy.host/?sharecode=UDV6QXBHZK',
     mediaUploadMs: 120000  // 云端媒体上传超时（超时即视为跳过，不阻塞本机保存）
   },
 

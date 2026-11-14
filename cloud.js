@@ -14,6 +14,23 @@
     return /^https?:$/.test(location.protocol) && h && !/^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(h);
   }
 
+  /* 云登录可用域名：云端服务的验证码接口不支持跨域（OPTIONS 预检返回 501），
+     仅页面与接口同源（即官方发布域名）时才能登录。GitHub Pages 等第三方域名会被浏览器拦截。 */
+  function isCloudCapableOrigin() {
+    if (!isOnlineOrigin()) return false;
+    var h = location.hostname;
+    return /\.app\.workbuddy\.host$/i.test(h) || /(^|\.)workbuddy\.cn$/i.test(h);
+  }
+
+  /* 把底层网络错误翻译成可操作的提示 */
+  function friendlyNetMsg(e) {
+    var m = (e && e.message) || '网络异常';
+    if (/Failed to fetch|NetworkError|Load failed|network/i.test(m)) {
+      return '网络请求未到达服务器。若当前是 GitHub Pages 等第三方域名，云登录暂不可用（接口不支持跨域），请改用官方发布链接登录；若是官方域名则检查网络后重试';
+    }
+    return m;
+  }
+
   function setMode(mode, message) {
     state.mode = mode; state.message = message;
     M.emit('cloud:status', { mode:mode, message:message });
@@ -142,6 +159,9 @@
 
   function autoRestore() {
     if (!isOnlineOrigin()) return;
+    /* 第三方域名（如 GitHub Pages）上云接口必然跨域失败：直接进入本地模式，
+       不加载云端组件，省去无谓的网络请求与控制台报错 */
+    if (!isCloudCapableOrigin()) { setMode('local', '本地模式'); return; }
     setMode('local', '连接中…');
     ensureClient().then(function (cloud) {
       return cloud.auth.getSession();
@@ -163,9 +183,18 @@
         '<button class="btn btn--outline btn--sm btn--danger" data-act="out">' + M.icon('close') + '<span>退出登录</span></button></div>' +
         '<p class="modal-note">云端仅保存结构化数据；媒体原文件体积较大，默认存放在本机浏览器数据库中。</p>';
     }
-    var hint = isOnlineOrigin() ? '' :
-      '<p class="modal-note" style="color:var(--amber)">当前是本地预览地址，云服务要求站点发布后的固定域名才能通过安全校验。发布后登录即可同步；在此之前所有内容照常保存在本机浏览器，不会丢失。</p>';
-    var dis = isOnlineOrigin() ? '' : ' disabled';
+    var capable = isCloudCapableOrigin();
+    var hint;
+    if (!isOnlineOrigin()) {
+      hint = '<p class="modal-note" style="color:var(--amber)">当前是本地预览地址，云服务要求站点发布后的固定域名才能通过安全校验。发布后登录即可同步；在此之前所有内容照常保存在本机浏览器，不会丢失。</p>';
+    } else if (!capable) {
+      hint = '<p class="modal-note" style="color:var(--amber)">当前域名（' + M.esc(location.hostname) + '）暂不支持云登录：云端接口不支持跨域调用，验证码请求会被浏览器拦截。' +
+        (C.officialUrl ? '请在 <a href="' + M.esc(C.officialUrl) + '" target="_blank" rel="noopener" style="color:var(--accent)">官方发布链接</a> 打开本站登录云同步（数据存在同一云端账号，登录过的设备之间自动互备）。' : '') +
+        '本页其余功能不受影响，所有内容保存在本机浏览器。</p>';
+    } else {
+      hint = '';
+    }
+    var dis = capable ? '' : ' disabled';
     return '<p style="font-size:calc(12px * var(--ui-scale));color:var(--text-2);line-height:1.9;margin:0 0 18px">登录后可把笔记、收藏与分类备份到云端，在其他设备恢复。不登录也完全可用——所有内容会保存在本机浏览器。</p>' +
       '<label class="modal-field"><span>邮箱</span><input type="email" id="cloud-email" placeholder="you@example.com" autocomplete="email"></label>' +
       '<div style="display:flex;gap:8px"><button class="btn btn--outline btn--sm" type="button" data-act="code" style="flex:none"' + dis + '>获取验证码</button>' +
@@ -178,7 +207,7 @@
       title: '云同步 / CLOUD SYNC',
       body: panelHTML(),
       footer: state.mode === 'online' ? '<button class="btn btn--outline" data-close2>关闭</button>'
-        : '<button class="btn btn--outline" data-close2>稍后再说</button><button class="btn btn--primary" data-act="login"' + (isOnlineOrigin() ? '' : ' disabled') + '>' + M.icon('cloud') + '<span>登录并同步</span></button>',
+        : '<button class="btn btn--outline" data-close2>稍后再说</button><button class="btn btn--primary" data-act="login"' + (isCloudCapableOrigin() ? '' : ' disabled') + '>' + M.icon('cloud') + '<span>登录并同步</span></button>',
       onMount: function (api) {
         var msg = M.$('#cloud-msg', api.el);
         var close2 = M.$('[data-close2]', api.el);
@@ -207,7 +236,7 @@
                   if (sent.error) throw sent.error;
                   pendingOtp = Object.assign({ email: email }, sent.data);
                   show('验证码已发送，请查收邮件（新邮箱将自动创建账号）');
-                }).catch(function (e) { b.disabled = false; show('发送失败：' + (e.message || '网络异常')); });
+                }).catch(function (e) { b.disabled = false; show('发送失败：' + friendlyNetMsg(e)); });
               return;
             }
             if (act === 'login') {
@@ -229,7 +258,7 @@
                 pendingOtp = null;
                 var session = res.data && (res.data.session || res.data);
                 return afterLogin(session).then(function () { api.close(); });
-              }).catch(function (e) { b.disabled = false; show('登录失败：' + (e.message || '验证码不正确')); });
+              }).catch(function (e) { b.disabled = false; show('登录失败：' + friendlyNetMsg(e)); });
             }
           });
         });
