@@ -22,6 +22,11 @@
 .brand-type small{display:block;margin-top:5px;font-family:var(--font-mono);font-size:calc(8px * var(--ui-scale));letter-spacing:.16em;color:var(--muted-2)}
 .side-rule{height:1px;background:linear-gradient(90deg,var(--line),transparent);margin:26px 0 22px}
 .side-nav{display:flex;flex-direction:column;gap:4px}
+.nav-group{display:flex;flex-direction:column;gap:4px}
+.nav-group+.nav-group{margin-top:18px}
+.nav-group-label{display:flex;align-items:center;gap:8px;padding:0 12px;margin-bottom:4px;font-family:var(--font-mono);font-size:calc(9px * var(--ui-scale));letter-spacing:.14em;color:var(--muted-2);text-transform:uppercase}
+.nav-group-label::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.nav-group-label em{font-style:normal;color:rgba(255,255,255,.16)}
 .nav-item{
   position:relative;display:flex;align-items:center;gap:12px;height:46px;padding:0 12px;
   color:var(--muted);font-size:calc(13px * var(--ui-scale));font-weight:500;letter-spacing:.02em;
@@ -148,6 +153,15 @@
 
 /* ---------------- MOBILE TABBAR ---------------- */
 .tabbar{display:none}
+.tab--more{background:none;border:0;font:inherit;cursor:pointer;font-family:inherit}
+.more-glyph{display:flex;align-items:center;justify-content:center;gap:3px;width:20px;height:20px}
+.more-glyph i{display:block;width:4px;height:4px;background:currentColor;border-radius:50%}
+.tab--more.is-active{color:var(--accent)}
+.tab--more.is-active .more-glyph i{box-shadow:0 0 0 3px rgba(255,74,28,.16)}
+
+/* ---------------- MOBILE MORE SHEET ---------------- */
+.more-backdrop{display:none}
+.more-sheet{display:none}
 
 /* ==========================================================
    RESPONSIVE
@@ -176,6 +190,28 @@
   .tab .icon{width:20px;height:20px}
   .tab.is-active{color:var(--accent)}
   .tab.is-active::after{content:"";position:absolute;top:0;width:24px;height:2px;background:var(--accent)}
+  /* 更多面板：底部抽屉 + 遮罩 */
+  .more-backdrop{display:block;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.62);backdrop-filter:blur(3px);animation:moreFade .18s ease}
+  .more-backdrop[hidden]{display:none}
+  .more-sheet{
+    display:block;position:fixed;left:0;right:0;bottom:0;z-index:151;
+    padding:18px 18px calc(20px + env(safe-area-inset-bottom));
+    background:var(--ink-900,#0d0f12);border-top:1px solid var(--accent-line);
+    box-shadow:0 -16px 40px rgba(0,0,0,.5);animation:moreUp .22s ease;
+  }
+  .more-sheet[hidden]{display:none}
+  @keyframes moreFade{from{opacity:0}to{opacity:1}}
+  @keyframes moreUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .more-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .more-head .eyebrow{margin-bottom:0}
+  .more-group-label{font-family:var(--font-mono);font-size:calc(9px * var(--ui-scale));letter-spacing:.14em;color:var(--muted-2);margin:14px 2px 8px}
+  .more-item{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:0 12px;margin-bottom:6px;border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--text-2);font-size:calc(13px * var(--ui-scale));text-decoration:none;cursor:pointer;text-align:left}
+  .more-item .icon{width:18px;height:18px;color:var(--muted)}
+  .more-item span{flex:1}
+  .more-item em{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));color:var(--muted-2);font-style:normal}
+  .more-item:active,.more-item:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+  .more-item:active .icon,.more-item:hover .icon{color:var(--accent)}
+  .more-foot{margin:12px 0 0;text-align:center;font-family:var(--font-mono);font-size:calc(9px * var(--ui-scale));letter-spacing:.14em;color:var(--muted-2)}
   .view>.container{padding-bottom:100px}
   .hero{height:min(66vh,620px);min-height:470px}
   .hero-content{max-width:82%}

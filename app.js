@@ -58,6 +58,7 @@
     M.routes.init();
     M.dashboard.init();
     M.pwa.init();
+    M.nav.init();
     M.cloud.init();
 
     M.$('#sync-chip').addEventListener('click', function () { M.cloud.openPanel(); });
