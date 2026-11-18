@@ -80,5 +80,6 @@ MOTO.ROUTES = [
   { key:'fuel',  idx:'03', name:'油耗计算 / FUEL' },
   { key:'links', idx:'04', name:'网址收藏 / LINKS' },
   { key:'media', idx:'05', name:'媒体管理 / MEDIA' },
-  { key:'ride',  idx:'06', name:'出行准备 / RIDE' }
+  { key:'ride',  idx:'06', name:'出行准备 / RIDE' },
+  { key:'dashboard', idx:'07', name:'骑行看板 / DASHBOARD' }
 ];

@@ -1,0 +1,79 @@
+/* ==========================================================
+   MOTO // GARAGE — 骑行看板 / DASHBOARD
+   复用设计系统变量，只读聚合展示
+   ========================================================== */
+
+/* ---------- 空数据横幅 ---------- */
+.db-notice{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;margin-bottom:16px;border:1px dashed var(--line-soft);background:rgba(12,14,17,.4)}
+.db-notice .icon{width:20px;height:20px;color:var(--accent);flex:none}
+.db-notice span{flex:1;min-width:220px;font-size:calc(12.5px * var(--ui-scale));color:var(--text-2);line-height:1.7}
+.db-notice .text-link{flex:none}
+
+/* ---------- KPI 卡片 ---------- */
+.db-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.db-kpi{padding:16px 16px 14px;border:1px solid var(--line);background:var(--ink-800,rgba(20,23,28,.7));position:relative;overflow:hidden}
+.db-kpi::before{content:"";position:absolute;left:0;top:0;width:34px;height:2px;background:var(--accent)}
+.db-kpi-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.db-kpi-label{font-family:var(--font-mono);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.db-kpi-top .icon{width:17px;height:17px;color:var(--accent);opacity:.75}
+.db-kpi-val{font-family:var(--font-display);font-size:calc(30px * var(--ui-scale));font-weight:700;color:var(--text);line-height:1.15;margin:10px 0 6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.db-kpi-val span{font-family:var(--font-mono);font-size:calc(11px * var(--ui-scale));font-weight:400;color:var(--muted);margin-left:6px;letter-spacing:.02em}
+.db-kpi-foot{font-size:calc(11px * var(--ui-scale));color:var(--muted-2)}
+@media(max-width:920px){.db-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.db-kpi-val{font-size:calc(26px * var(--ui-scale))}}
+
+/* ---------- 图表区 ---------- */
+.db-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:1100px){.db-grid{grid-template-columns:1fr}}
+.db-panel{min-width:0}
+.db-chart{margin-top:8px}
+.db-chart-svg{width:100%;height:200px;display:block;overflow:visible}
+.db-axis{fill:var(--muted-2);font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale))}
+.db-bar-val{fill:var(--text-2);font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale))}
+.db-chart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:200px;color:var(--muted-2);font-size:calc(12.5px * var(--ui-scale));text-align:center;padding:0 20px}
+.db-chart-empty .icon{width:28px;height:28px;color:var(--line)}
+
+/* ---------- 下方：记录 + 侧栏 ---------- */
+.db-lower{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;align-items:start}
+@media(max-width:1100px){.db-lower{grid-template-columns:1fr}}
+.db-side-col{display:grid;gap:14px}
+
+/* 记录表 */
+.db-table-wrap{overflow-x:auto;margin-top:10px}
+.db-table{width:100%;border-collapse:collapse;font-size:calc(12px * var(--ui-scale))}
+.db-table th{text-align:left;font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));letter-spacing:.06em;color:var(--muted);text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.db-table td{padding:10px;border-bottom:1px solid var(--line-soft);color:var(--text-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.db-table tbody tr:last-child td{border-bottom:0}
+.db-table tbody tr:hover{background:rgba(255,74,28,.04)}
+.db-table .db-cost{color:var(--accent-hi);font-weight:500}
+.db-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 20px;text-align:center;color:var(--muted)}
+.db-empty .icon{width:34px;height:34px;color:var(--line)}
+.db-empty strong{font-family:var(--font-display);font-size:calc(16px * var(--ui-scale));color:var(--text);letter-spacing:.04em}
+.db-empty p{margin:0 0 6px;font-size:calc(12px * var(--ui-scale));line-height:1.7;max-width:320px}
+
+/* 数据概览 */
+.db-side{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.db-side-item{display:flex;flex-direction:column;gap:2px;padding:12px;border:1px solid var(--line-soft);background:rgba(12,14,17,.5)}
+.db-side-item strong{font-family:var(--font-display);font-size:calc(23px * var(--ui-scale));font-weight:700;color:var(--text);line-height:1;font-variant-numeric:tabular-nums}
+.db-side-item span{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));color:var(--accent)}
+.db-side-item em{font-style:normal;font-size:calc(11px * var(--ui-scale));color:var(--muted);margin-top:3px}
+
+/* 天气参考 */
+.db-wx-row{display:flex;align-items:center;gap:14px;padding:10px 0}
+.db-wx-temp{font-family:var(--font-display);font-size:calc(40px * var(--ui-scale));font-weight:700;color:var(--accent);line-height:1}
+.db-wx-row div{display:flex;flex-direction:column;gap:4px}
+.db-wx-row strong{font-family:var(--font-display);font-size:calc(15px * var(--ui-scale));letter-spacing:.04em;color:var(--text)}
+.db-wx-row div span{font-size:calc(11.5px * var(--ui-scale));color:var(--muted)}
+.db-wx-note{margin:8px 0 0;font-size:calc(11px * var(--ui-scale));color:var(--muted-2);line-height:1.7}
+.db-wx-empty{display:flex;align-items:center;gap:10px;padding:12px 0;color:var(--muted);font-size:calc(12px * var(--ui-scale));line-height:1.7}
+.db-wx-empty .icon{width:19px;height:19px;color:var(--muted-2);flex:none}
+
+/* ---------- 首页看板入口 ---------- */
+.home-db-entry{display:flex;align-items:center;gap:14px;padding:15px 18px;margin-bottom:16px;border:1px solid var(--line);background:linear-gradient(90deg,var(--accent-soft),rgba(12,14,17,.4) 55%);transition:border-color var(--fast),transform var(--fast)}
+.home-db-entry:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+.home-db-icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--accent-line);color:var(--accent);flex:none}
+.home-db-icon .icon{width:21px;height:21px}
+.home-db-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.home-db-copy strong{font-family:var(--font-display);font-size:calc(17px * var(--ui-scale));letter-spacing:.04em;color:var(--text)}
+.home-db-copy span{font-size:calc(11.5px * var(--ui-scale));color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-db-arrow{width:18px;height:18px;color:var(--accent);flex:none}

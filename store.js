@@ -34,6 +34,7 @@
       settings: { province:'浙江', oil:'95', manualPrice:false, manualPriceValue:'', wallpaperPaused:false, weatherCity:'杭州', defaultsV2:true },
       priceCache: null,
       fuelDraft: { distance:'', fuel:'' },
+      fuelLogs: [],
       lastSync: 0
     };
   }
@@ -60,6 +61,13 @@
         }
         obj.settings.defaultsV2 = true;
         try { localStorage.setItem(KEY, JSON.stringify(obj)); } catch (e2) {}
+      }
+      // v3：新增加油历史 fuelLogs（看板数据源）。缺省字段已由种子合并补齐，
+      // 这里只负责把已落盘的旧数据也标注升级版本，便于以后继续演进。
+      if (!obj.defaultsV3) {
+        if (!Array.isArray(obj.fuelLogs)) obj.fuelLogs = [];
+        obj.defaultsV3 = true;
+        try { localStorage.setItem(KEY, JSON.stringify(obj)); } catch (e3) {}
       }
       return obj;
     } catch (e) {

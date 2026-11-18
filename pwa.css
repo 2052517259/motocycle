@@ -1,0 +1,29 @@
+/* ==========================================================
+   MOTO // GARAGE — PWA 安装与离线状态
+   ========================================================== */
+
+/* ---------- 顶栏离线标识 ---------- */
+.offline-chip{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 10px;border:1px solid rgba(255,176,32,.4);background:var(--amber-soft);color:var(--amber);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.06em;white-space:nowrap}
+.offline-chip[hidden]{display:none}
+.offline-chip .led{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+
+/* 顶栏安装按钮在应用模式中隐藏 */
+.appearance-tool.is-hidden,[data-act="pwa-install"].is-hidden{display:none}
+
+/* ---------- 首页安装引导卡 ---------- */
+.pwa-home-card{display:flex;align-items:center;gap:14px;padding:15px 18px;margin-bottom:16px;border:1px dashed var(--accent-line);background:rgba(255,74,28,.04)}
+.pwa-home-card[hidden]{display:none}
+.pwa-home-icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--accent-line);color:var(--accent);flex:none}
+.pwa-home-icon .icon{width:21px;height:21px}
+.pwa-home-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.pwa-home-copy strong{font-family:var(--font-display);font-size:calc(16px * var(--ui-scale));letter-spacing:.04em;color:var(--text)}
+.pwa-home-copy span{font-size:calc(11.5px * var(--ui-scale));color:var(--muted);line-height:1.5}
+.pwa-home-card .btn{flex:none}
+@media(max-width:560px){.pwa-home-card{flex-wrap:wrap}.pwa-home-card .btn{width:100%}}
+
+/* ---------- 安装说明弹窗 ---------- */
+.pwa-guide{display:flex;flex-direction:column;gap:16px;text-align:center;padding:8px 4px}
+.pwa-guide-icon{width:72px;height:72px;margin:0 auto;display:grid;place-items:center;border:1px solid var(--accent-line);background:var(--accent-soft);color:var(--accent)}
+.pwa-guide-icon .icon{width:34px;height:34px}
+.pwa-guide p{margin:0;font-size:calc(13.5px * var(--ui-scale));color:var(--text-2);line-height:1.85}
+.pwa-guide-note{font-size:calc(11.5px * var(--ui-scale))!important;color:var(--muted)!important}

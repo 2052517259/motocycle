@@ -1,0 +1,23 @@
+{
+  "name": "MOTO // GARAGE · 骑行工作台",
+  "short_name": "MOTO GARAGE",
+  "description": "骑士的个人工作台：动态壁纸、骑行天气、高德路线、油耗记录与骑行看板。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0c0e11",
+  "theme_color": "#0c0e11",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "骑行看板", "short_name": "看板", "url": "./index.html#/dashboard", "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }] },
+    { "name": "记一笔油耗", "short_name": "记油耗", "url": "./index.html#/fuel", "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }] },
+    { "name": "出行准备", "short_name": "出行", "url": "./index.html#/ride", "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }] }
+  ]
+}

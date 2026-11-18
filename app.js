@@ -35,7 +35,15 @@
     M.$('#stat-media').textContent = d.mediaIndex.length;
     var total = d.mediaIndex.reduce(function (s, m) { return s + (m.size || 0); }, 0);
     M.$('#stat-media-size').textContent = total ? M.fmtSize(total) : '0 MB';
+    var sum = M.dashboard ? M.dashboard.aggregate() : null;
+    var entry = M.$('#home-db-summary');
+    if (entry && sum) {
+      entry.textContent = sum.logs.length
+        ? '累计 ' + Number(sum.totalKm).toFixed(0) + ' km · ' + money0(sum.totalCost) + ' · ' + sum.logs.length + ' 次记录'
+        : '累计里程与油费，一目了然';
+    }
   }
+  function money0(n) { return '¥' + Math.round(Number(n)); }
 
   function boot() {
     clock(); setInterval(clock, 1000);
@@ -48,6 +56,8 @@
     M.media.init();
     M.weather.init();
     M.routes.init();
+    M.dashboard.init();
+    M.pwa.init();
     M.cloud.init();
 
     M.$('#sync-chip').addEventListener('click', function () { M.cloud.openPanel(); });

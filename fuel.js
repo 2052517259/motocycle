@@ -7,6 +7,7 @@
     'https://api.apihz.cn/api/jinrong/youjia.php?id=88888888&key=88888888&sheng='
   ];
   var els = {}, fetching = false, lastFetchAt = 0, pollTimer = null;
+  var current = null; // 当前有效计算结果（供「记一笔」使用）
 
   function settings() { return M.store.data.settings; }
   function num(id) { var v = parseFloat(els[id].value); return isFinite(v) ? v : null; }
@@ -176,6 +177,8 @@
     M.$('#hint-fuel').classList.toggle('is-error', f != null && f <= 0);
 
     if (!ok) {
+      current = null;
+      syncSaveBtn();
       ['out-consumption','out-perkm'].forEach(function (id) { setOut(id, id === 'out-consumption' ? '--.-' : '-.--', true); });
       setOut('out-total', '¥ --.--'); setOut('out-kmpl', '--.- km'); setOut('out-100cost', '¥ --.--');
       setOut('out-distance', d > 0 ? d + ' km' : '-- km');
@@ -189,6 +192,8 @@
     var cons = f / d * 100;
     var perkm = f * p / d;
     var total = f * p;
+    current = { distance:d, fuel:f, price:p, consumption:cons, perKm:perkm, total:total, at:Date.now() };
+    syncSaveBtn();
     setOut('out-consumption', cons.toFixed(2), false);
     setOut('out-perkm', perkm.toFixed(3), false);
     setOut('out-total', '¥ ' + total.toFixed(2));
@@ -203,6 +208,25 @@
   function setJudge(text, cls) {
     var el = M.$('#out-judge');
     el.textContent = text; el.className = 'result-judge ' + (cls || '');
+  }
+
+  /* ---------- 加油日志（看板数据源） ---------- */
+  function syncSaveBtn() {
+    var b = M.$('#fuel-save-log');
+    if (b) b.disabled = !current;
+  }
+  function saveLog() {
+    if (!current) { M.toast('请先填写有效的里程与油耗', 'warn'); return; }
+    var logs = M.store.data.fuelLogs || (M.store.data.fuelLogs = []);
+    logs.unshift({
+      id: M.uid(), distance: current.distance, fuel: current.fuel,
+      price: current.price, consumption: current.consumption,
+      perKm: current.perKm, total: current.total, at: current.at,
+      province: settings().province, oil: settings().oil
+    });
+    if (logs.length > 500) logs.length = 500;
+    M.store.save(['fuelLogs']);
+    M.toast('已记入加油日志，可在「骑行看板」查看趋势', 'ok', 3000);
   }
 
   function persistDraft() {
@@ -261,6 +285,9 @@
       els.distance.value = ''; els.fuel.value = '';
       persistDraft(); calculate(); M.toast('已清空本次数据', 'info', 1600);
     });
+    var saveBtn = M.$('#fuel-save-log');
+    if (saveBtn) saveBtn.addEventListener('click', saveLog);
+    syncSaveBtn();
 
     if (settings().manualPrice) {
       els.price.disabled = false;
@@ -295,5 +322,9 @@
     });
   }
 
-  M.fuel = { init: init, refresh: function () { return fetchPrice({ force: true, announce: true }); } };
+  M.fuel = {
+    init: init,
+    refresh: function () { return fetchPrice({ force: true, announce: true }); },
+    saveLog: saveLog
+  };
 })(window.MOTO);

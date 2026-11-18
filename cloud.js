@@ -87,7 +87,7 @@
       notes: d.notes, links: d.links, linkCats: d.linkCats,
       mediaCats: d.mediaCats, mediaIndex: d.mediaIndex,
       routes: d.routes, weatherCache: d.weatherCache,
-      settings: d.settings, fuelDraft: d.fuelDraft,
+      settings: d.settings, fuelDraft: d.fuelDraft, fuelLogs: d.fuelLogs || [],
       appearance: M.appearance ? M.appearance.get() : null,
       updatedAt: Date.now()
     };
@@ -135,7 +135,7 @@
           linkCats: remote.linkCats || [], mediaCats: remote.mediaCats || [],
           mediaIndex: remote.mediaIndex || [], routes: remote.routes || [],
           weatherCache: remote.weatherCache || null, settings: remote.settings,
-          fuelDraft: remote.fuelDraft, lastSync: Date.now()
+          fuelDraft: remote.fuelDraft, fuelLogs: remote.fuelLogs || [], lastSync: Date.now()
         });
         if (remote.appearance && M.appearance) M.appearance.set(remote.appearance);
         suppress = false;
