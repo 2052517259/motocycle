@@ -1,0 +1,6 @@
+# MOTO // GARAGE — 搜索引擎抓取规则
+# 主站：https://2052517259.github.io/motocycle/
+User-agent: *
+Allow: /
+
+Sitemap: https://2052517259.github.io/motocycle/sitemap.xml

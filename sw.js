@@ -5,13 +5,13 @@
    更新版本号 CACHE_VER 即可让所有客户端拉取新版本。 */
 'use strict';
 
-var CACHE_VER = 'moto-garage-v1';
+var CACHE_VER = 'moto-garage-v2';
 var SHELL = [
-  './', './index.html', './manifest.json',
-  './theme.css', './layout.css', './modules.css', './appearance.css', './ride.css', './dashboard.css',
+  './', './index.html', './manifest.json', './robots.txt', './sitemap.xml',
+  './theme.css', './layout.css', './modules.css', './appearance.css', './ride.css', './dashboard.css', './pwa.css',
   './config.js', './appearance.js', './ui.js', './store.js', './cloud.js',
   './wallpaper.js', './notes.js', './fuel.js', './links.js', './media.js',
-  './weather.js', './routes.js', './dashboard.js', './app.js',
+  './weather.js', './routes.js', './dashboard.js', './pwa.js', './nav.js', './app.js',
   './favicon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png'
 ];
 

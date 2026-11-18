@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 纯前端应用：所有视图共用 index.html，通过 hash 路由，故仅提交一个规范 URL -->
+  <url>
+    <loc>https://2052517259.github.io/motocycle/</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

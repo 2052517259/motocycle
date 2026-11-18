@@ -20,18 +20,19 @@
     return a;
   }
 
-  function urlOf(e) {
+  function urlsOf(e) {
     var crop = C.photoCrops[Math.floor(Math.random() * C.photoCrops.length)];
     if (e.t === 'us') {
-      return 'https://images.unsplash.com/photo-' + e.id +
-        '?w=1600&q=80&fm=jpg&fit=crop&crop=' + crop;
+      var ub = 'https://images.unsplash.com/photo-' + e.id + '?fm=jpg&fit=crop&crop=' + crop;
+      return { low: ub + '&w=480&q=45', hi: ub + '&w=1600&q=80' };
     }
-    return 'https://images.pexels.com/photos/' + e.id + '/pexels-photo-' + e.id +
-      '.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900';
+    var pb = 'https://images.pexels.com/photos/' + e.id + '/pexels-photo-' + e.id + '.jpeg?auto=compress&cs=tinysrgb';
+    return { low: pb + '&w=480&h=270', hi: pb + '&w=1600&h=900' };
   }
 
   function makePhoto(e) {
-    return { id: e.t + ':' + e.id, url: urlOf(e), source: e.t === 'us' ? 'Unsplash' : 'Pexels' };
+    var u = urlsOf(e);
+    return { id: e.t + ':' + e.id, url: u.hi, lowUrl: u.low, source: e.t === 'us' ? 'Unsplash' : 'Pexels' };
   }
 
   /* 取新一批：从图池随机抽样，保证彼此不同 */
@@ -59,14 +60,24 @@
   function activeLayer() { return frontIsA ? layerA : layerB; }
   function hiddenLayer() { return frontIsA ? layerB : layerA; }
 
-  function applyPhoto(p) {
+  function applyPhoto(p, url) {
     var back = hiddenLayer();
-    back.style.backgroundImage = 'url("' + p.url + '")';
+    back.style.backgroundImage = 'url("' + (url || p.url) + '")';
     void back.offsetWidth; // 强制回流以确保交叉淡入
     back.classList.add('is-live');
     activeLayer().classList.remove('is-live');
     frontIsA = !frontIsA;
     renderMeta();
+  }
+
+  /* 渐进加载：低清占位先上屏，高清在后台加载完成后无感替换当前显示层 */
+  function upgradeHi(p, token) {
+    if (!p.lowUrl || p.lowUrl === p.url) return;
+    preload(p.url, C.photoLoadMs).then(function (ok) {
+      if (!ok || token !== showToken) return; // 已切到别的图则放弃，避免闪回
+      var live = activeLayer();
+      if (live) live.style.backgroundImage = 'url("' + p.url + '")';
+    });
   }
 
   function setStatus(text) {
@@ -117,9 +128,20 @@
   function show(p) {
     if (!p) return Promise.resolve(false);
     var token = ++showToken;
-    return preload(p.url, C.photoLoadMs).then(function (ok) {
-      if (token !== showToken || !ok) return false;
-      applyPhoto(p);
+    // 先加载低清占位（更快上屏），成功即显示并后台升级高清；低清失败则直接尝试高清
+    var first = p.lowUrl || p.url;
+    return preload(first, C.photoLoadMs).then(function (ok) {
+      if (token !== showToken) return false;
+      if (!ok && p.lowUrl) {
+        return preload(p.url, C.photoLoadMs).then(function (ok2) {
+          if (token !== showToken || !ok2) return false;
+          applyPhoto(p, p.url);
+          return true;
+        });
+      }
+      if (!ok) return false;
+      applyPhoto(p, first);
+      upgradeHi(p, token);
       return true;
     });
   }
