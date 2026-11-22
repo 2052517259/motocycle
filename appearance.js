@@ -4,7 +4,13 @@
   'use strict';
 
   var KEY = 'moto.appearance.v1';
-  var DEFAULTS = { scale: 1.15, leading: 1.7, accent: 'orange', motion: 'full' };
+  var DEFAULTS = { theme: 'dark', scale: 1.15, leading: 1.7, accent: 'orange', motion: 'full' };
+  var THEMES = {
+    dark:  { name:'深色', en:'DARK',  desc:'经典碳黑车库，赛道氛围', swatch:'#0c0e11', accent:'orange' },
+    light: { name:'明亮', en:'LIGHT', desc:'清爽白底，日光下更清晰', swatch:'#ffffff', accent:'cyan' },
+    warm:  { name:'暖色', en:'WARM',  desc:'琥珀赤陶，温暖复古质感', swatch:'#3a2418', accent:'amber' },
+    cool:  { name:'冷色', en:'COOL',  desc:'钢蓝青调，冷静科技感', swatch:'#132131', accent:'cyan' }
+  };
   var ACCENTS = {
     orange: { name:'赛车橙', hex:'#ff4a1c', hi:'#ff6a3d', rgb:'255,74,28', spec:'RACING ORANGE / #FF4A1C' },
     amber:  { name:'警戒黄', hex:'#ffb020', hi:'#ffc453', rgb:'255,176,32', spec:'WARNING AMBER / #FFB020' },
@@ -25,6 +31,7 @@
     if (!isFinite(leading)) leading = DEFAULTS.leading;
     leading = Math.min(1.9, Math.max(1.55, leading));
     return {
+      theme: THEMES[o.theme] ? o.theme : DEFAULTS.theme,
       scale: Math.round(scale * 100) / 100,
       leading: leading,
       accent: ACCENTS[o.accent] ? o.accent : DEFAULTS.accent,
@@ -51,25 +58,41 @@
     if (sw) sw.style.background = a.hex;
     if (tx) tx.textContent = a.spec;
     var btn = document.querySelector('#appearance-btn');
-    if (btn) btn.title = '外观设置 · 文字 ' + Math.round(cfg.scale * 100) + '%';
+    if (btn) btn.title = '外观设置 · ' + THEMES[cfg.theme].name + ' · 文字 ' + Math.round(cfg.scale * 100) + '%';
   }
 
   function apply() {
     var r = document.documentElement, a = ACCENTS[cfg.accent];
+    // 主题：覆盖颜色令牌（在 <head> 尽早执行，避免首屏闪白）
+    r.setAttribute('data-theme', cfg.theme);
+    r.setAttribute('data-motion', cfg.motion);
+    r.setAttribute('data-accent', cfg.accent);
     r.style.setProperty('--ui-scale', String(cfg.scale));
     r.style.setProperty('--read-leading', String(cfg.leading));
+    // 强调色：主题切换时跟随推荐色，用户随后可单独改（写入 cfg.accent）
     r.style.setProperty('--accent', a.hex);
     r.style.setProperty('--accent-hi', a.hi);
     r.style.setProperty('--accent-rgb', a.rgb);
     r.style.setProperty('--accent-soft', 'rgba(' + a.rgb + ',.13)');
     r.style.setProperty('--accent-line', 'rgba(' + a.rgb + ',.45)');
-    r.setAttribute('data-motion', cfg.motion);
-    r.setAttribute('data-accent', cfg.accent);
+    // theme-color 跟随页面主背景，移动端状态栏协调
+    var tc = THEMES[cfg.theme] ? THEMES[cfg.theme].swatch : '#0c0e11';
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) { meta.setAttribute('content', cfg.theme === 'light' ? '#ffffff' : tc); }
     syncSpec();
   }
 
   function get() { return Object.assign({}, cfg); }
-  function set(next) { cfg = normalize(next); write(); apply(); return get(); }
+  function set(next) {
+    var prevTheme = cfg.theme;
+    cfg = normalize(next);
+    // 主题变化且未显式指定 accent 时，采用新主题的推荐强调色，保证色调协调
+    if (cfg.theme !== prevTheme && THEMES[cfg.theme] && THEMES[cfg.theme].accent &&
+        !(next && Object.prototype.hasOwnProperty.call(next, 'accent'))) {
+      cfg.accent = THEMES[cfg.theme].accent;
+    }
+    write(); apply(); return get();
+  }
 
   /* ---------------- 设置面板 ---------------- */
   function seg(group, list, labels, current, isPercent) {
@@ -89,13 +112,34 @@
     }).join('') + '</div>';
   }
 
+  /* 主题选择器：大色卡 + 名称 + 说明，直观预览每套配色 */
+  function themePicker(current) {
+    return '<div class="ap-themes" data-group="theme">' + Object.keys(THEMES).map(function (k) {
+      var t = THEMES[k];
+      return '<button type="button" class="ap-theme ' + (k === current ? 'is-active' : '') +
+        '" data-val="' + k + '" aria-pressed="' + (k === current) + '">' +
+        '<span class="ap-theme-swatch" style="background:' + t.swatch + '">' +
+          '<i style="background:' + ACCENTS[t.accent].hex + '"></i>' +
+          '<i style="background:' + (k === 'light' ? '#1f2937' : '#e8eef5') + '"></i>' +
+        '</span>' +
+        '<strong>' + t.name + '</strong><em>' + t.en + '</em>' +
+        '<small>' + t.desc + '</small></button>';
+    }).join('') + '</div>';
+  }
+
   function bodyHtml() {
     var reduced = cfg.motion === 'reduced';
     return '' +
+      '<div class="ap-group">' +
+        '<div class="ap-group-head"><strong>主题风格 / THEME</strong><span class="ap-value">' + THEMES[cfg.theme].name + '</span></div>' +
+        themePicker(cfg.theme) +
+        '<p class="ap-hint">四套主题统一了配色、字体、间距、按钮与卡片，切换即时生效并自动记忆。文字对比度已针对各主题校准。</p>' +
+      '</div>' +
+
       '<div class="ap-preview">' +
         '<span class="eyebrow">// LIVE PREVIEW · 实时预览</span>' +
         '<h3>两轮之上，自有方向</h3>' +
-        '<p>字号、行距与强调色会即时作用于全站所有页面，改动即时保存。</p>' +
+        '<p>主题、字号、行距与强调色会即时作用于全站所有页面，改动即时保存。</p>' +
         '<div class="ap-preview-row"><button class="btn btn--primary btn--sm" type="button" tabindex="-1">示例按钮</button>' +
         '<span class="cat-pill is-active">机车相关</span><span class="mini-tag">MOTO</span></div>' +
       '</div>' +
@@ -155,7 +199,13 @@
             if (group === 'scale') cfg.scale = Number(val);
             else if (group === 'leading') cfg.leading = Number(val);
             else if (group === 'accent') cfg.accent = val;
+            else if (group === 'theme') {
+              cfg.theme = val;
+              // 切主题时采用该主题推荐的强调色，保证整体色调协调
+              if (THEMES[val] && THEMES[val].accent) cfg.accent = THEMES[val].accent;
+            }
             cfg = normalize(cfg); write(); apply(); refresh(api);
+            if (group === 'theme') M.toast('已切换到「' + THEMES[cfg.theme].name + '」主题', 'ok', 1800);
             return;
           }
           if (e.target.closest && e.target.closest('[data-toggle]')) {
@@ -187,7 +237,7 @@
 
   M.appearance = {
     get: get, set: set, apply: apply, openPanel: openPanel,
-    defaults: DEFAULTS, accents: ACCENTS
+    defaults: DEFAULTS, accents: ACCENTS, themes: THEMES
   };
 
   apply(); // 首屏立即生效

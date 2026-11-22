@@ -13,9 +13,8 @@
     notes: function () { M.notes.init(); },
     links: function () { M.links.init(); },
     media: function () { M.media.init(); },
-    routes: function () { M.routes.init(); },
-    dashboard: function () { M.dashboard.init(); },
-    fuel: function () { M.fuel.init(); },
+    ride: function () { M.routes.init(); },
+    fuel: function () { M.fuelBoard.init(); },
     appearance: function () { /* appearance 已在 head 早期初始化，无需重复 */ }
   };
   function ensureView(key) {
@@ -62,8 +61,8 @@
     M.$('#stat-media').textContent = d.mediaIndex.length;
     var total = d.mediaIndex.reduce(function (s, m) { return s + (m.size || 0); }, 0);
     M.$('#stat-media-size').textContent = total ? M.fmtSize(total) : '0 MB';
-    var sum = M.dashboard ? M.dashboard.aggregate() : null;
-    var entry = M.$('#home-db-summary');
+    var sum = M.fuelBoard ? M.fuelBoard.aggregate() : null;
+    var entry = M.$('#home-fb-summary');
     if (entry && sum) {
       entry.textContent = sum.logs.length
         ? '累计 ' + Number(sum.totalKm).toFixed(0) + ' km · ' + money0(sum.totalCost) + ' · ' + sum.logs.length + ' 次记录'

@@ -34,6 +34,10 @@ MOTO.CONFIG = {
     { t:'us', id:'1558618666-fcd25c85cd64' },
     { t:'us', id:'1502744688674-c619d1586c9e' },
     { t:'us', id:'1502920917128-1aa500764cbd' },
+    { t:'us', id:'1560472354-b33ff0c44a43' },
+    { t:'us', id:'1503387762-592deb58ef4e' },
+    { t:'us', id:'1571607388263-1044f9ea01dd' },
+    { t:'us', id:'1519641471654-76ce0107ad1b' },
     { t:'px', id:'2393821' },
     { t:'px', id:'1413412' },
     { t:'px', id:'6044224' },
@@ -43,7 +47,10 @@ MOTO.CONFIG = {
     { t:'px', id:'1191109' },
     { t:'px', id:'2768550' },
     { t:'px', id:'209263' },
-    { t:'px', id:'259672' }
+    { t:'px', id:'259672' },
+    { t:'px', id:'3577488' },
+    { t:'px', id:'2036647' },
+    { t:'px', id:'1631259' }
   ],
   photoBatchSize: 8,            // 每一批（一轮）的照片数量
   photoCrops: ['entropy','top','bottom','left','right','center'],
@@ -64,10 +71,30 @@ MOTO.CONFIG = {
   weatherRetries: 2,            // 单源失败自动重试次数
   weatherCacheTtlMs: 3 * 60 * 60 * 1000, // 天气缓存有效时长
 
-  /* 高德地图：路线跳转 */
+  /* 高德地图：页内地图与路线跳转 */
   amapUri: 'https://uri.amap.com/navigation',   // 已知点位坐标时精确导航
   amapWeb: 'https://www.amap.com/dir',          // 文本地址检索路线（无需 key）
-  amapSrc: 'moto-garage'
+  amapSrc: 'moto-garage',
+  /* 合规说明：请到高德开放平台（https://console.amap.com）申请「Web端(JS API)」Key，
+     配置 Referer 域名白名单后，用真实 Key 替换下面的占位符。源码中不内置任何有效 Key。
+
+     该 Key 的「域名白名单」需要加入以下 4 条（一行一条，不带协议、路径与端口）：
+       localhost
+       127.0.0.1
+       2052517259.github.io                                  ← GitHub Pages
+       wbapp-4ahooqceit2m0ldsodoed0.app.workbuddy.host         ← WorkBuddy 官方链接
+     GitHub Pages 的 /motocycle/ 只是路径，不需要填进白名单。
+     若控制台要求写成完整 URL，则改用：
+       http://localhost:8000  /  http://127.0.0.1:8000
+       https://2052517259.github.io
+       https://wbapp-4ahooqceit2m0ldsodoed0.app.workbuddy.host */
+  amapJsKey: '请在高德开放平台申请自己的 Key 并替换此占位符',
+  /* 2021-12-02 之后申请的 Key 必须同时配置安全密钥（securityJsCode），
+     否则白名单填对了也会报 INVALID_USER_SCODE。在控制台与 Key 一同获取后填入此处；
+     旧 Key（无安全密钥）留空即可。 */
+  amapJsSecurityCode: '',
+  amapJsVersion: '1.4.15',
+  amapJsPlugins: ['AMap.Driving', 'AMap.Autocomplete', 'AMap.Geocoder', 'AMap.Geolocation']
 };
 
 MOTO.PROVINCES = ['北京','天津','河北','山西','内蒙古','辽宁','吉林','黑龙江','上海','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆'];
@@ -77,9 +104,8 @@ MOTO.OIL_LABELS = { '92':'92# 汽油', '95':'95# 汽油', '98':'98# 汽油', '0h
 MOTO.ROUTES = [
   { key:'home',  idx:'01', name:'首页 / HERO' },
   { key:'notes', idx:'02', name:'记事本 / NOTES' },
-  { key:'fuel',  idx:'03', name:'油耗计算 / FUEL' },
+  { key:'fuel',  idx:'03', name:'油耗看板 / FUEL BOARD' },
   { key:'links', idx:'04', name:'网址收藏 / LINKS' },
   { key:'media', idx:'05', name:'媒体管理 / MEDIA' },
-  { key:'ride',  idx:'06', name:'出行准备 / RIDE' },
-  { key:'dashboard', idx:'07', name:'骑行看板 / DASHBOARD' }
+  { key:'ride',  idx:'06', name:'出行准备 / RIDE' }
 ];

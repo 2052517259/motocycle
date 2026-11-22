@@ -13,7 +13,7 @@
 .note-item.is-active{border-left-color:var(--accent);background:var(--accent-soft);border-top-color:var(--accent-line);border-right-color:var(--accent-line);border-bottom-color:var(--accent-line)}
 .note-item-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .note-item-title{font-size:calc(13px * var(--ui-scale));font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.note-item.is-active .note-item-title{color:#fff}
+.note-item.is-active .note-item-title{color:var(--text-strong)}
 .note-item-date{font-family:var(--font-mono);font-size:calc(9px * var(--ui-scale));color:var(--muted-2);flex:none}
 .note-item-excerpt{margin-top:5px;font-size:calc(11.5px * var(--ui-scale));line-height:1.6;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .note-tags-mini{margin-top:8px;display:flex;gap:5px;flex-wrap:wrap}
@@ -111,6 +111,23 @@ input.editor-title:focus{box-shadow:none!important}
   .result-secondary{grid-template-columns:repeat(2,1fr)}
   .result-num strong{font-size:calc(44px * var(--ui-scale))}
 }
+
+/* ---------------- FUEL BOARD / HISTORY ---------------- */
+.fbh-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.fbh-head strong{font-family:var(--font-display);font-size:calc(15px * var(--ui-scale));letter-spacing:.04em;color:var(--text)}
+.fbh-head span{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));color:var(--muted)}
+.fbh-list{display:flex;flex-direction:column;gap:6px}
+.fbh-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 11px;border:1px solid var(--line-soft);background:var(--scrim-icon)}
+.fbh-date{font-family:var(--font-mono);font-size:calc(12px * var(--ui-scale));font-weight:700;color:var(--text);min-width:92px}
+.fbh-row .fbh-data{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--font-mono);font-size:calc(11px * var(--ui-scale));color:var(--text-2);flex:1}
+.fbh-row .fbh-data b{color:var(--accent-hi);font-weight:700}
+.fbh-backfill{font-family:var(--font-mono);font-size:calc(9px * var(--ui-scale));color:var(--amber);border:1px solid rgba(255,176,32,.35);background:var(--amber-soft);padding:1px 6px}
+.fbh-del{appearance:none;border:1px solid var(--line);background:transparent;color:var(--muted);width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;flex:none;transition:all var(--fast)}
+.fbh-del .icon{width:15px;height:15px}
+.fbh-del:hover{border-color:var(--danger);color:var(--danger);background:rgba(255,93,93,.09)}
+.fbh-empty{padding:18px;text-align:center;color:var(--muted);font-size:calc(12px * var(--ui-scale));border:1px dashed var(--line)}
+input[type=date]{color-scheme:dark;min-height:44px}
+html[data-theme="light"] input[type=date]{color-scheme:light}
 
 /* ---------------- CATEGORY PILLS (shared) ---------------- */
 .cat-scroll{display:flex;align-items:center;gap:7px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;min-width:0;max-width:100%}

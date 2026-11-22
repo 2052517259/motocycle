@@ -13,10 +13,10 @@
   --ink-700:#222831;
   --line:#2b323c;
   --line-soft:#20262e;
-  --text:#f2f4f7;
-  --text-2:#b8c0cb;
-  --muted:#7d8794;
-  --muted-2:#5c6571;
+  --text:#f6f8fb;
+  --text-2:#d4dce6;
+  --muted:#aab5c3;
+  --muted-2:#8b96a5;
   --accent-rgb:255,74,28;
   --accent:#ff4a1c;
   --accent-hi:#ff6a3d;
@@ -47,31 +47,121 @@
   --slow:1.2s var(--ease);
   --sidebar-w:calc(248px * var(--ui-scale));
   --topbar-h:64px;
+
+  /* --- 主题相关派生令牌（默认深色，data-theme 覆盖）--- */
+  --bg-body:var(--ink-900);          /* 页面主背景 */
+  --bg-hero-a:#0e1115;               /* Hero 渐变起 */
+  --bg-hero-b:#0a0c0f;               /* Hero 渐变止 */
+  --bg-hero:#0a0b0d;                 /* 壁纸区底 */
+  --bg-elevated:var(--ink-800);      /* 卡片/浮层高一层 */
+  --bg-input:var(--ink-950);         /* 输入框底 */
+  --bg-grid:#000;                    /* 网格纹理色 */
+  --scrim:rgba(6,7,9,.9);            /* 壁纸压暗遮罩 */
+  --scrim-modal:rgba(4,5,7,.78);     /* 弹窗遮罩 */
+  --scrim-icon:rgba(12,14,17,.55);   /* 图标按钮底 */
+  --on-accent:#fff;                  /* 强调色上的文字 */
+  --on-accent-strong:#fff;           /* 强调色悬浮时文字 */
+  --scroll-thumb:#303844;
+  --scroll-thumb-hv:#48515e;
+  --text-strong:#fff;                /* 反白文字（选中项） */
+  --media-bg:#000;                   /* 图片灯箱底 */
+  --glow:rgba(var(--accent-rgb),.055); /* 氛围光晕 */
+  --glow-2:rgba(255,176,32,.035);
+  /* Hero 区为照片背景，文字始终用浅色 + 深色遮罩，与主题无关，保证对比度 */
+  --hero-ink:#f5f7fa; --hero-ink-2:#cdd6e0; --hero-ink-muted:#aeb9c6;
+  --hero-grid-line:rgba(255,255,255,.12);
+}
+
+/* ============================================================
+   多主题（方向：外观主题）
+   仅覆盖颜色令牌；字号/间距/圆角/按钮形状等全部沿用同一套，
+   保证四套主题在结构、交互、对比度上完全一致。
+   accent 强调色由外观设置单独控制，此处给每套主题一个推荐初始色，
+   用户仍可在外观面板里自由改强调色。
+   ============================================================ */
+
+/* ---- 明亮主题 ---- */
+html[data-theme="light"]{
+  --ink-950:#f4f6f9; --ink-900:#ffffff; --ink-850:#f7f9fc;
+  --ink-800:#ffffff; --ink-750:#eef1f6; --ink-700:#e2e7ee;
+  --line:#d5dce6; --line-soft:#e6ebf2;
+  --text:#121820; --text-2:#2c3643; --muted:#475363; --muted-2:#647184;
+  --accent-rgb:37,99,235; --accent:#2563eb; --accent-hi:#1d4ed8;
+  --amber:#b45309; --amber-soft:rgba(180,83,9,.12);
+  --steel:#64748b; --ok:#087f5b; --danger:#c92a2a;
+  --bg-body:#ffffff; --bg-hero-a:#f8fafc; --bg-hero-b:#ffffff; --bg-hero:#eef2f7;
+  --bg-elevated:#ffffff; --bg-input:#f4f6f9; --bg-grid:#94a3b8;
+  --scrim:rgba(226,232,240,.86); --scrim-modal:rgba(15,23,42,.45);
+  --scrim-icon:rgba(255,255,255,.7);
+  --on-accent:#fff; --on-accent-strong:#fff;
+  --scroll-thumb:#c2cbd8; --scroll-thumb-hv:#9aa7b8;
+  --text-strong:#1d4ed8; --media-bg:#e2e8f0;
+  --glow:rgba(37,99,235,.06); --glow-2:rgba(180,83,9,.04);
+  --shadow:0 18px 50px rgba(15,23,42,.12); --shadow-sm:0 8px 24px rgba(15,23,42,.08);
+}
+
+/* ---- 暖色主题（琥珀 / 赤陶）---- */
+html[data-theme="warm"]{
+  --ink-950:#1a1310; --ink-900:#241a15; --ink-850:#2b1f19;
+  --ink-800:#33251e; --ink-750:#3d2d24; --ink-700:#4a362b;
+  --line:#5a4133; --line-soft:#412f26;
+  --text:#fff7ef; --text-2:#eddccd; --muted:#d3b49c; --muted-2:#b69279;
+  --accent-rgb:255,122,69; --accent:#ff7a45; --accent-hi:#ff9670;
+  --amber:#ffc857; --amber-soft:rgba(255,200,87,.13);
+  --steel:#c4a58f; --ok:#7fc99a; --danger:#ff7b72;
+  --bg-body:#241a15; --bg-hero-a:#2e2019; --bg-hero-b:#241a15; --bg-hero:#1c1410;
+  --bg-elevated:#33251e; --bg-input:#1a1310; --bg-grid:#000;
+  --scrim:rgba(28,20,16,.9); --scrim-modal:rgba(12,8,6,.8);
+  --scrim-icon:rgba(28,20,16,.6);
+  --on-accent:#241a15; --on-accent-strong:#241a15;
+  --scroll-thumb:#5a4133; --scroll-thumb-hv:#7a5a47;
+  --text-strong:#ffb08a; --media-bg:#0a0706;
+  --glow:rgba(255,122,69,.08); --glow-2:rgba(255,200,87,.05);
+}
+
+/* ---- 冷色主题（钢蓝 / 青）---- */
+html[data-theme="cool"]{
+  --ink-950:#0a1018; --ink-900:#0e1620; --ink-850:#121d29;
+  --ink-800:#172533; --ink-750:#1c2e3f; --ink-700:#243a4e;
+  --line:#2f4a61; --line-soft:#21384b;
+  --text:#f2f8ff; --text-2:#d2e2f0; --muted:#a9c2d8; --muted-2:#88a4bc;
+  --accent-rgb:34,211,238; --accent:#22d3ee; --accent-hi:#67e8f9;
+  --amber:#fbbf24; --amber-soft:rgba(251,191,36,.12);
+  --steel:#94b8d4; --ok:#34d399; --danger:#fb7185;
+  --bg-body:#0e1620; --bg-hero-a:#132131; --bg-hero-b:#0e1620; --bg-hero:#0a1018;
+  --bg-elevated:#172533; --bg-input:#0a1018; --bg-grid:#000;
+  --scrim:rgba(10,16,24,.9); --scrim-modal:rgba(3,8,14,.8);
+  --scrim-icon:rgba(10,16,24,.6);
+  --on-accent:#08131a; --on-accent-strong:#08131a;
+  --scroll-thumb:#2f4a61; --scroll-thumb-hv:#41627f;
+  --text-strong:#67e8f9; --media-bg:#05090e;
+  --glow:rgba(34,211,238,.07); --glow-2:rgba(59,130,246,.05);
 }
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
-  margin:0;min-height:100vh;background:var(--ink-900);color:var(--text);
+  margin:0;min-height:100vh;background:var(--bg-body);color:var(--text);
   font-family:var(--font-body);font-size:calc(14px * var(--ui-scale));line-height:var(--read-leading);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  transition:background-color var(--mid),color var(--mid);
 }
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
   background:
-    radial-gradient(900px 500px at 15% -10%,rgba(var(--accent-rgb),.055),transparent 70%),
-    radial-gradient(700px 500px at 100% 100%,rgba(255,176,32,.035),transparent 70%);
+    radial-gradient(900px 500px at 15% -10%,var(--glow),transparent 70%),
+    radial-gradient(700px 500px at 100% 100%,var(--glow-2),transparent 70%);
 }
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:inherit;text-decoration:none}
 img,video{max-width:100%;display:block}
-::selection{background:var(--accent);color:#fff}
+::selection{background:var(--accent);color:var(--on-accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 ::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-track{background:var(--ink-900)}
-::-webkit-scrollbar-thumb{background:#303844;border-radius:6px}
-::-webkit-scrollbar-thumb:hover{background:#48515e}
+::-webkit-scrollbar-track{background:var(--bg-body)}
+::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--scroll-thumb-hv)}
 
 .svg-sprite{position:absolute;width:0;height:0;overflow:hidden}
 .icon{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:square;stroke-linejoin:miter}
@@ -130,7 +220,7 @@ h3{font-family:var(--font-display);font-size:calc(22px * var(--ui-scale));letter
 .btn .icon{width:16px;height:16px}
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0)}
-.btn--primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn--primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .btn--primary:hover{background:var(--accent-hi);border-color:var(--accent-hi);box-shadow:0 10px 26px rgba(var(--accent-rgb),.25)}
 .btn--outline:hover{border-color:var(--accent);color:var(--accent-hi);background:var(--accent-soft)}
 .btn--sm{min-height:32px;padding:0 13px;font-size:calc(11px * var(--ui-scale));gap:6px}
@@ -139,13 +229,13 @@ h3{font-family:var(--font-display);font-size:calc(22px * var(--ui-scale));letter
 
 .icon-btn{
   width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid var(--line);background:rgba(12,14,17,.55);color:var(--text-2);
+  border:1px solid var(--line);background:var(--scrim-icon);color:var(--text-2);
   transition:all var(--fast);flex:none;
 }
 .icon-btn .icon{width:16px;height:16px}
 .icon-btn:hover{border-color:var(--accent);color:var(--accent-hi);background:var(--accent-soft)}
 .text-link{border:0;background:none;padding:0;color:var(--accent-hi);font-size:calc(12px * var(--ui-scale));letter-spacing:.03em;text-decoration:underline;text-underline-offset:3px;transition:color var(--fast)}
-.text-link:hover{color:#fff}
+.text-link:hover{color:var(--text-strong)}
 
 /* ---------- FORM ---------- */
 input[type=text],input[type=number],input[type=search],input[type=email],textarea,select{
@@ -197,7 +287,7 @@ select option{background:var(--ink-850)}
 @keyframes toast-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
 @keyframes toast-out{to{opacity:0;transform:translateX(24px)}}
 
-.modal-root{position:fixed;inset:0;z-index:8000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,5,7,.78);backdrop-filter:blur(7px)}
+.modal-root{position:fixed;inset:0;z-index:8000;display:none;align-items:center;justify-content:center;padding:18px;background:var(--scrim-modal);backdrop-filter:blur(7px)}
 .modal-root.is-open{display:flex}
 .modal{width:min(460px,100%);max-height:min(92vh,900px);overflow:auto;background:var(--ink-850);border:1px solid var(--line);box-shadow:var(--shadow);animation:modal-in .28s var(--ease) both}
 .modal--wide{width:min(680px,100%)}
@@ -210,7 +300,7 @@ select option{background:var(--ink-850)}
 .modal-field>span{display:block;margin-bottom:7px;font-size:calc(11px * var(--ui-scale));font-weight:700;letter-spacing:.06em;color:var(--text-2)}
 .modal-note{font-size:calc(11.5px * var(--ui-scale));color:var(--muted);line-height:1.7;margin:14px 0 0}
 
-.empty-state{text-align:center;padding:70px 20px;border:1px dashed var(--line);background:rgba(22,26,32,.4)}
+.empty-state{text-align:center;padding:70px 20px;border:1px dashed var(--line);background:var(--scrim-icon)}
 .empty-state h3{font-size:calc(22px * var(--ui-scale));margin:16px 0 6px}
 .empty-state p{margin:0 0 20px;color:var(--muted);font-size:calc(13px * var(--ui-scale))}
 .empty-glyph{width:62px;height:62px;margin:0 auto;display:grid;place-items:center;border:1px solid var(--line);background:var(--ink-800);color:var(--accent)}

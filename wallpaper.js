@@ -8,8 +8,19 @@
   var INTERVAL = C.wallpaperIntervalMs;
   var layerA, layerB, frontIsA = true;
   var batch = [], deck = [], history = [], shown = 0, round = 0, lastId = null;
+  var supply = []; // 全局不重复供给队列：由整个图池洗牌而来，用尽后才重组
   var running = true, elapsed = 0, lastTs = 0, showToken = 0;
   var bootRetry = null;
+
+  /* 从供给队列取一批：全局尽量不重复，只有整池用尽才重新洗牌 */
+  function refillSupply() {
+    supply = shuffle(C.photoPool);
+    // 若上一张仍在池内，把它排到队尾，避免新一轮开头就与上一轮末张重复
+    if (lastId) {
+      var idx = supply.map(function (e) { return e.t + ':' + e.id; }).indexOf(lastId);
+      if (idx > -1) supply.push(supply.splice(idx, 1)[0]);
+    }
+  }
 
   function shuffle(arr) {
     var a = arr.slice();
@@ -35,10 +46,11 @@
     return { id: e.t + ':' + e.id, url: u.hi, lowUrl: u.low, source: e.t === 'us' ? 'Unsplash' : 'Pexels' };
   }
 
-  /* 取新一批：从图池随机抽样，保证彼此不同 */
+  /* 取新一批：优先从未用过的供给队列抽，耗尽后整池重组，显著降低重复 */
   function fetchBatch() {
     if (!C.photoPool.length) return Promise.resolve(null);
-    var picks = shuffle(C.photoPool).slice(0, Math.min(C.photoBatchSize, C.photoPool.length));
+    if (!supply.length) refillSupply();
+    var picks = supply.splice(0, Math.min(C.photoBatchSize, supply.length));
     return Promise.resolve(picks.map(makePhoto));
   }
 
@@ -209,6 +221,24 @@
     restartTimer();
   }
 
+  /* 手动换一批：丢弃当前批次剩余内容，立刻加载新一批并切换 */
+  function refreshBatch() {
+    deck = [];
+    batch = [];
+    supply = [];
+    loadRound().then(function (ok) {
+      if (ok) {
+        advance();
+        setStatus('已换新一批 · 外部动态壁纸');
+        if (M.toast) M.toast('已换一批新壁纸', 'ok', 1600);
+      } else {
+        setStatus('外部照片暂不可用 · 已保留当前画面，稍后自动重试');
+        if (M.toast) M.toast('暂时无法获取新壁纸，已保留当前画面', 'warn', 2400);
+      }
+    });
+    restartTimer();
+  }
+
   function restartTimer() { elapsed = 0; lastTs = performance.now(); }
 
   function setRunning(v) {
@@ -259,6 +289,8 @@
 
     M.$('#wp-next').addEventListener('click', next);
     M.$('#wp-prev').addEventListener('click', prev);
+    var refreshBtn = M.$('#wp-refresh');
+    if (refreshBtn) refreshBtn.addEventListener('click', refreshBatch);
     M.$('#wp-play').addEventListener('click', function () { setRunning(!running); });
     var dots = M.$('#wp-dots');
     if (dots) dots.addEventListener('click', function (e) {
@@ -274,7 +306,7 @@
   }
 
   M.wallpaper = {
-    init: init, next: next, prev: prev,
+    init: init, next: next, prev: prev, refreshBatch: refreshBatch,
     _state: function () {
       return {
         batch: batch.map(function (p) { return p.id; }),

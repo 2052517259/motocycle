@@ -1,0 +1,114 @@
+/* ==========================================================
+   MOTO // GARAGE — 油耗看板 / FUEL BOARD
+   复用设计系统变量，只读聚合展示
+   ========================================================== */
+
+/* ---------- 空数据横幅 ---------- */
+.fb-notice{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;margin-bottom:16px;border:1px dashed var(--line-soft);background:var(--scrim-icon)}
+.fb-notice[hidden]{display:none}
+.fb-notice .icon{width:20px;height:20px;color:var(--accent);flex:none}
+.fb-notice span{flex:1;min-width:220px;font-size:calc(12.5px * var(--ui-scale));color:var(--text-2);line-height:1.7}
+.fb-notice .text-link{flex:none}
+
+/* ---------- 时间范围筛选 ---------- */
+.fb-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;margin-bottom:14px;border:1px solid var(--line);background:var(--scrim-icon)}
+.fb-toolbar-label{font-family:var(--font-mono);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.08em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.fb-range{display:inline-flex;flex-wrap:wrap;gap:4px;padding:3px;border:1px solid var(--line-soft);background:var(--ink-800,rgba(20,23,28,.7))}
+.fb-range-btn{appearance:none;border:0;background:transparent;color:var(--muted);font-family:var(--font-mono);font-size:calc(11.5px * var(--ui-scale));letter-spacing:.02em;padding:6px 12px;min-height:32px;cursor:pointer;transition:background var(--fast),color var(--fast)}
+.fb-range-btn:hover{color:var(--text);background:var(--scrim-icon)}
+.fb-range-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.fb-range-btn.is-active{background:var(--accent);color:var(--ink-900,#0c0e11);font-weight:700}
+.fb-toolbar-info{margin-left:auto;font-size:calc(11px * var(--ui-scale));color:var(--muted-2);white-space:nowrap}
+@media(max-width:520px){.fb-toolbar-info{margin-left:0;width:100%}}
+
+/* ---------- 合并统计卡片：总计条 + 视图切换 ---------- */
+.fb-statcard{margin-bottom:14px}
+.fb-total{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0 14px;padding-bottom:14px;border-bottom:1px solid var(--line-soft)}
+.fb-total-item{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:1px solid var(--line-soft);background:var(--scrim-icon);min-width:0}
+.fb-total-label{font-family:var(--font-mono);font-size:calc(9.5px * var(--ui-scale));letter-spacing:.06em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-total-val{font-family:var(--font-display);font-size:calc(24px * var(--ui-scale));font-weight:700;color:var(--text);line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fb-total-val small{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));font-weight:400;color:var(--muted);margin-left:5px;letter-spacing:.02em}
+.fb-total-foot{font-size:calc(10px * var(--ui-scale));color:var(--muted-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:920px){.fb-total{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.fb-total{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.fb-total-val{font-size:calc(21px * var(--ui-scale))}}
+
+/* 视图切换标签 */
+.fb-tabs{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--line-soft);background:var(--ink-800,rgba(20,23,28,.7));margin-bottom:2px}
+.fb-tab{appearance:none;border:0;background:transparent;color:var(--muted);font-family:var(--font-mono);font-size:calc(11.5px * var(--ui-scale));letter-spacing:.03em;padding:6px 18px;min-height:32px;cursor:pointer;transition:background var(--fast),color var(--fast)}
+.fb-tab:hover{color:var(--text);background:var(--scrim-icon)}
+.fb-tab:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.fb-tab.is-active{background:var(--accent);color:var(--ink-900,#0c0e11);font-weight:700}
+
+/* ---------- 图表区 ---------- */
+/* 图表与统计卡片同容器：桌面图在上统计在下，移动端反过来 */
+.fb-main{display:flex;flex-direction:column}
+.fb-main .fb-grid{margin-bottom:14px}
+@media(max-width:900px){
+  .fb-main .fb-statcard{order:-1;margin-bottom:14px}
+  .fb-main .fb-grid{margin-bottom:0}
+}
+.fb-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+@media(max-width:1340px){.fb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1100px){.fb-grid{grid-template-columns:1fr}}
+.fb-panel{min-width:0}
+.fb-chart{margin-top:8px}
+.fb-chart-svg{width:100%;height:200px;display:block;overflow:visible}
+.fb-axis{fill:var(--muted-2);font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale))}
+.fb-bar-val{fill:var(--text-2);font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale))}
+.fb-chart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:200px;color:var(--muted-2);font-size:calc(12.5px * var(--ui-scale));text-align:center;padding:0 20px}
+.fb-chart-empty .icon{width:28px;height:28px;color:var(--line)}
+
+/* 新增统计项的关键数值条 */
+.fb-mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 4px}
+.fb-mini-stat{display:flex;flex-direction:column;gap:3px;padding:10px 11px;border:1px solid var(--line-soft);background:var(--scrim-icon);min-width:0}
+.fb-mini-stat-label{font-family:var(--font-mono);font-size:calc(9.5px * var(--ui-scale));letter-spacing:.05em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-mini-stat-val{font-family:var(--font-display);font-size:calc(20px * var(--ui-scale));font-weight:700;color:var(--text);line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fb-mini-stat-val small{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));font-weight:400;color:var(--muted);margin-left:4px}
+.fb-mini-stat-foot{font-size:calc(10px * var(--ui-scale));color:var(--muted-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:620px){.fb-mini-stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- 下方：记录 + 侧栏 ---------- */
+.fb-lower{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;align-items:start}
+@media(max-width:1100px){.fb-lower{grid-template-columns:1fr}}
+.fb-side-col{display:grid;gap:14px}
+
+/* 记录表 */
+.fb-table-wrap{overflow-x:auto;margin-top:10px}
+.fb-table{width:100%;border-collapse:collapse;font-size:calc(12px * var(--ui-scale))}
+.fb-table th{text-align:left;font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));letter-spacing:.06em;color:var(--muted);text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+.fb-table td{padding:10px;border-bottom:1px solid var(--line-soft);color:var(--text-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fb-table tbody tr:last-child td{border-bottom:0}
+.fb-table tbody tr:hover{background:rgba(255,74,28,.04)}
+.fb-table .fb-cost{color:var(--accent-hi);font-weight:500}
+.fb-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 20px;text-align:center;color:var(--muted)}
+.fb-empty .icon{width:34px;height:34px;color:var(--line)}
+.fb-empty strong{font-family:var(--font-display);font-size:calc(16px * var(--ui-scale));color:var(--text);letter-spacing:.04em}
+.fb-empty p{margin:0 0 6px;font-size:calc(12px * var(--ui-scale));line-height:1.7;max-width:320px}
+
+/* 数据概览 */
+.fb-side{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.fb-side-item{display:flex;flex-direction:column;gap:2px;padding:12px;border:1px solid var(--line-soft);background:var(--scrim-icon)}
+.fb-side-item strong{font-family:var(--font-display);font-size:calc(23px * var(--ui-scale));font-weight:700;color:var(--text);line-height:1;font-variant-numeric:tabular-nums}
+.fb-side-item span{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));color:var(--accent)}
+.fb-side-item em{font-style:normal;font-size:calc(11px * var(--ui-scale));color:var(--muted);margin-top:3px}
+
+/* 天气参考 */
+.fb-wx-row{display:flex;align-items:center;gap:14px;padding:10px 0}
+.fb-wx-temp{font-family:var(--font-display);font-size:calc(40px * var(--ui-scale));font-weight:700;color:var(--accent);line-height:1}
+.fb-wx-row div{display:flex;flex-direction:column;gap:4px}
+.fb-wx-row strong{font-family:var(--font-display);font-size:calc(15px * var(--ui-scale));letter-spacing:.04em;color:var(--text)}
+.fb-wx-row div span{font-size:calc(11.5px * var(--ui-scale));color:var(--muted)}
+.fb-wx-note{margin:8px 0 0;font-size:calc(11px * var(--ui-scale));color:var(--muted-2);line-height:1.7}
+.fb-wx-empty{display:flex;align-items:center;gap:10px;padding:12px 0;color:var(--muted);font-size:calc(12px * var(--ui-scale));line-height:1.7}
+.fb-wx-empty .icon{width:19px;height:19px;color:var(--muted-2);flex:none}
+
+/* ---------- 首页看板入口 ---------- */
+.home-fb-entry{display:flex;align-items:center;gap:14px;padding:15px 18px;margin-bottom:16px;border:1px solid var(--line);background:linear-gradient(90deg,var(--accent-soft),var(--scrim-icon) 55%);transition:border-color var(--fast),transform var(--fast)}
+.home-fb-entry:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+.home-fb-icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--accent-line);color:var(--accent);flex:none}
+.home-fb-icon .icon{width:21px;height:21px}
+.home-fb-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.home-fb-copy strong{font-family:var(--font-display);font-size:calc(17px * var(--ui-scale));letter-spacing:.04em;color:var(--text)}
+.home-fb-copy span{font-size:calc(11.5px * var(--ui-scale));color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-fb-arrow{width:18px;height:18px;color:var(--accent);flex:none}

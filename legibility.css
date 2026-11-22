@@ -1,0 +1,68 @@
+/* ==========================================================
+   MOTO // GARAGE — 文本清晰度增强层
+   最后加载：统一提高字重 / 亮度下限 / 最小字号，
+   解决小字号发虚、过暗、缩小页面后难以辨认的问题。
+   保持原有配色与视觉风格，仅做可读性增强。
+   ========================================================== */
+
+/* 正文基准字重：从 400 提到 500，笔画更实、不发虚 */
+body{font-weight:500}
+
+/* 标题保持高字重，避免细体小标题 */
+h1,h2,h3,h4,.eyebrow,.nav-item,.fb-total-val,.fb-mini-stat-val,
+.stat-card strong,.result-num strong,.price-main strong{font-weight:700}
+
+/* 说明 / 次要文字：补字重，令牌亮度已在 theme.css 提升 */
+.section-sub,.field-label,.field-hint,.form-note,.foot-note,.modal-note,
+.empty-state p,.list-empty,.editor-empty p,.wx-error p,.route-note,.route-city,
+.home-wx-meta span,.pwa-home-copy span,.pwa-guide p,.ap-preview p,.ap-hint,
+.ap-footer-note,.modal-field>span,.result-label,.result-judge,.result-secondary span,
+.link-desc,.note-item-excerpt,.fb-total-foot,.fb-mini-stat-foot,.fb-notice span{
+  font-weight:500
+}
+
+/* 极小标签最小字号：max() 保证缩小页面 / 小视口下仍可读，不被压到 8~9px */
+.brand-type small,.nav-group-label,.nav-idx,.sys-row,.side-copy,
+.more-group-label,.more-item em,.more-foot,.stat-label,.stat-foot,.quick-no,
+.spec-list dt,.spec-list dd,.list-meta,.note-item-date,.tag-label,.editor-meta,
+.editor-foot,.mini-field>span,.field-label em,.input-unit>span,.panel-code,
+.section-meta,.auto-badge,.price-source,.price-kicker,.gauge-scale,.form-note,
+.cat-pill .cnt,.links-meta,.link-url,.media-usage span,.media-sub,.media-type-tag,
+.uq-size,.uq-status,.uq-title,.file-preview .fp-meta p,.cat-manage-row .count,
+.dropzone-corner,.wx-metric-label,.wx-cache-note,.wx-suit li,.home-wx-meta span,
+.route-hint,.route-list-head #route-count,.pwa-guide-note,.ap-theme em,.ap-toggle-text em,
+.fb-axis,.fb-bar-val,.fb-toolbar-label,.fb-toolbar-info,.fb-total-label,
+.fb-mini-stat-label,.fb-mini-stat-foot,.section-meta{
+  font-size:max(10.5px,calc(9.5px * var(--ui-scale)))
+}
+
+/* 一般说明文字最小 12px，避免缩放后过小 */
+.field-hint,.foot-note,.modal-note,.form-note,.fb-notice span,.section-sub,
+.empty-state p,.wx-error p,.route-note,.link-desc,.note-item-excerpt,.ap-hint,
+.pwa-home-copy span,.media-name,.link-title,.note-item-title{
+  font-size:max(12px,calc(11.5px * var(--ui-scale)))
+}
+
+/* 按钮文字最小 12px 且加粗，缩小页面时仍清晰 */
+.btn{font-weight:700;font-size:max(12px,calc(12.5px * var(--ui-scale)))}
+.btn--sm,.fb-range-btn,.fb-tab,.cat-pill,.text-link{
+  font-size:max(11.5px,calc(11px * var(--ui-scale)));font-weight:600
+}
+.icon-btn{color:var(--text-2)}
+
+/* 侧栏底部说明原为硬编码深色，改为令牌色保证各主题可读 */
+.side-copy{color:var(--muted-2)}
+/* 数字统计使用的 mono 小字提亮 */
+.fb-axis,.fb-bar-val{fill:var(--text-2)}
+
+/* 防止小视口下文字挤压：允许长文本换行、不无限收缩 */
+.mini-stat-label,.fb-total-foot,.fb-mini-stat-foot,.field-label,.link-url,.media-sub{
+  overflow-wrap:anywhere
+}
+.fb-total-item,.fb-mini-stat,.fb-kpi,.quick-item,.link-card,.media-card,.note-item{
+  min-width:0
+}
+@media(max-width:520px){
+  /* 窄屏下极小标签不再强制等宽字距，避免换行错位 */
+  .nav-group-label,.more-group-label,.fb-total-label,.fb-toolbar-label{letter-spacing:.04em}
+}
