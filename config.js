@@ -88,11 +88,11 @@ MOTO.CONFIG = {
        http://localhost:8000  /  http://127.0.0.1:8000
        https://2052517259.github.io
        https://wbapp-4ahooqceit2m0ldsodoed0.app.workbuddy.host */
-  amapJsKey: '请在高德开放平台申请自己的 Key 并替换此占位符',
+  amapJsKey: 'f74b7fc0b1b7c7e931c4cacde1042206',
   /* 2021-12-02 之后申请的 Key 必须同时配置安全密钥（securityJsCode），
      否则白名单填对了也会报 INVALID_USER_SCODE。在控制台与 Key 一同获取后填入此处；
      旧 Key（无安全密钥）留空即可。 */
-  amapJsSecurityCode: '',
+  amapJsSecurityCode: '2e09082502799b6788314ceec095db9f',
   amapJsVersion: '1.4.15',
   amapJsPlugins: ['AMap.Driving', 'AMap.Autocomplete', 'AMap.Geocoder', 'AMap.Geolocation']
 };

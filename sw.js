@@ -5,7 +5,7 @@
    更新版本号 CACHE_VER 即可让所有客户端拉取新版本。 */
 'use strict';
 
-var CACHE_VER = 'moto-garage-v11';
+var CACHE_VER = 'moto-garage-v12';
 var SHELL = [
   './', './index.html', './manifest.json', './robots.txt', './sitemap.xml',
   './theme.css', './layout.css', './modules.css', './appearance.css', './ride.css', './fuel-board.css', './pwa.css', './legibility.css',
