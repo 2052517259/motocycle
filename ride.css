@@ -80,6 +80,14 @@
 
 /* ---------- 页内地图与路线规划 ---------- */
 .route-map-block{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+.route-mode-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.route-mode-label{font-family:var(--font-mono);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+.route-mode-label em{font-style:normal;color:var(--muted-2);margin-left:5px}
+.route-modes{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0}
+.route-mode{min-width:52px;padding:7px 11px;border:1px solid var(--line);background:var(--ink-800,rgba(20,23,28,.7));color:var(--text-2);font-family:var(--font-display);font-size:calc(12.5px * var(--ui-scale));font-weight:600;letter-spacing:.05em;cursor:pointer;transition:border-color var(--fast),color var(--fast),background var(--fast)}
+.route-mode:hover{border-color:var(--accent-line);color:var(--text)}
+.route-mode.is-active{background:var(--accent);border-color:var(--accent);color:var(--ink-900,#0c0e11);font-weight:700}
+.route-mode:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .route-map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .route-pick,.route-plan-acts{display:flex;gap:7px;flex-wrap:wrap}
 .route-pick .btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--ink-900,#0c0e11);font-weight:700}
@@ -94,13 +102,36 @@
 .route-map-hint{margin:9px 0 0;font-size:calc(11.5px * var(--ui-scale));line-height:1.7;color:var(--muted-2)}
 .route-result{margin-top:12px;padding:12px 14px;border:1px solid var(--line-soft);background:var(--scrim-icon)}
 .route-result[hidden]{display:none}
-.route-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.route-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
 .route-result-head .eyebrow{margin-bottom:0}
-.route-policy{font-family:var(--font-mono);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.04em;color:var(--accent);border:1px solid var(--accent-line);padding:2px 8px}
+.route-result-head-acts{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.route-policy{font-family:var(--font-mono);font-size:calc(10.5px * var(--ui-scale));letter-spacing:.04em;color:var(--accent);border:1px solid var(--accent-line);padding:4px 9px}
+#rt-nav .icon{width:14px;height:14px}
+#rt-nav:disabled{opacity:.45;cursor:not-allowed}
+.route-schemes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:10px}
+.route-scheme{display:flex;flex-direction:column;gap:6px;padding:10px 11px;text-align:left;border:1px solid var(--line);border-left:3px solid transparent;background:var(--ink-800,rgba(20,23,28,.7));color:var(--text);cursor:pointer;transition:border-color var(--fast),background var(--fast),transform var(--fast)}
+.route-scheme:hover{border-color:var(--accent-line);transform:translateY(-1px)}
+.route-scheme.is-active{border-color:var(--accent);border-left-color:var(--accent);background:rgba(75,208,139,.08)}
+.route-scheme:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.scheme-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.scheme-top strong{font-family:var(--font-display);font-size:calc(13px * var(--ui-scale));font-weight:700;color:var(--text)}
+.scheme-top em{font-family:var(--font-mono);font-style:normal;font-size:calc(9px * var(--ui-scale));letter-spacing:.05em;color:var(--ok);border:1px solid var(--ok);padding:1px 5px}
+.scheme-main{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:calc(11px * var(--ui-scale));color:var(--text-2)}
+.scheme-main b{font-family:var(--font-display);font-size:calc(16px * var(--ui-scale));font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.scheme-main span{font-variant-numeric:tabular-nums}
+.scheme-fact{font-size:calc(10.5px * var(--ui-scale));line-height:1.5;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.route-scheme.is-active .scheme-fact{color:var(--text-2)}
+.route-scheme-loading,.route-scheme-empty{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:16px 12px;font-size:calc(12px * var(--ui-scale));color:var(--text-2)}
+.route-scheme-empty{color:var(--muted)}
+.rt-spinner{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:rt-spin .7s linear infinite;flex:none}
+@keyframes rt-spin{to{transform:rotate(360deg)}}
+.route-result-note{margin:10px 0 0;padding:8px 10px;border-left:2px solid var(--line);background:rgba(0,0,0,.14);font-size:calc(11px * var(--ui-scale));line-height:1.6;color:var(--muted)}
+.route-result-note.is-warn{border-left-color:var(--amber);background:var(--amber-soft);color:var(--amber)}
+.route-result-note:empty{display:none}
 .route-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .route-metric{display:flex;flex-direction:column;gap:3px;padding:10px 11px;border:1px solid var(--line-soft);background:var(--ink-800,rgba(20,23,28,.7));min-width:0}
 .route-metric span{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));letter-spacing:.05em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.route-metric strong{font-family:var(--font-display);font-size:calc(19px * var(--ui-scale));font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.route-metric strong{font-family:var(--font-display);font-size:calc(16px * var(--ui-scale));font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;line-height:1.35;overflow-wrap:anywhere}
 .route-metric strong small{font-family:var(--font-mono);font-size:calc(10px * var(--ui-scale));font-weight:400;color:var(--muted);margin-left:3px}
 .route-steps{margin-top:10px;display:grid;gap:5px;max-height:132px;overflow:auto}
 .route-step{display:flex;gap:9px;align-items:flex-start;font-size:calc(11.5px * var(--ui-scale));line-height:1.65;color:var(--text-2)}
@@ -112,6 +143,11 @@
   .route-map-toolbar{align-items:stretch}
   .route-pick,.route-plan-acts{width:100%}
   .route-pick .btn,.route-plan-acts .btn{flex:1;min-width:0}
+  .route-modes{width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+  .route-mode{min-width:0;padding:8px 3px}
+  .route-result-head-acts{width:100%;justify-content:space-between}
+  .route-schemes{grid-template-columns:1fr}
+  .scheme-fact{white-space:normal}
 }
 /* 高德输入提示面板层级：避免被面板/地图遮挡 */
 .amap-sug-result{z-index:1200 !important}

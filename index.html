@@ -494,6 +494,10 @@
                 </div>
               </div>
               <div class="route-map-block">
+                <div class="route-mode-bar">
+                  <span class="route-mode-label">交通方式 <em>MODE</em></span>
+                  <div class="route-modes" id="rt-mode-tabs" role="group" aria-label="交通方式切换"></div>
+                </div>
                 <div class="route-map-toolbar">
                   <div class="route-pick" role="group" aria-label="地图点选">
                     <button type="button" class="btn btn--sm btn--outline" id="rt-pick-from" aria-pressed="false">点选起点</button>
@@ -514,9 +518,11 @@
                   </div>
                 </div>
                 <div class="route-result" id="rt-result" hidden>
-                  <div class="route-result-head"><span class="eyebrow">// ROUTE RESULT</span><span class="route-policy" id="rt-policy">最快捷</span></div>
+                  <div class="route-result-head"><span class="eyebrow">// ROUTE RESULT</span><span class="route-result-head-acts"><span class="route-policy" id="rt-policy">驾车 · 最快捷</span><button type="button" class="btn btn--sm btn--primary" id="rt-nav"><svg class="icon"><use href="#i-external"/></svg><span>开始导航</span></button></span></div>
+                  <div class="route-schemes" id="rt-schemes" aria-label="可选路线方案"></div>
                   <div class="route-metrics" id="rt-metrics"></div>
                   <div class="route-steps" id="rt-steps"></div>
+                  <p class="route-result-note" id="rt-result-note"></p>
                 </div>
                 <p class="route-map-hint" id="rt-map-hint">选择「点选起点 / 点选终点」后点击地图可直接落点；输入地名时会弹出地点联想。定位需要 HTTPS 或 localhost 环境。</p>
               </div>

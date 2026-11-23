@@ -94,7 +94,8 @@ MOTO.CONFIG = {
      旧 Key（无安全密钥）留空即可。 */
   amapJsSecurityCode: '2e09082502799b6788314ceec095db9f',
   amapJsVersion: '1.4.15',
-  amapJsPlugins: ['AMap.Driving', 'AMap.Autocomplete', 'AMap.Geocoder', 'AMap.Geolocation']
+  amapJsPlugins: ['AMap.Driving', 'AMap.Transfer', 'AMap.Walking', 'AMap.Riding',
+                  'AMap.Autocomplete', 'AMap.Geocoder', 'AMap.Geolocation']
 };
 
 MOTO.PROVINCES = ['北京','天津','河北','山西','内蒙古','辽宁','吉林','黑龙江','上海','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆'];
